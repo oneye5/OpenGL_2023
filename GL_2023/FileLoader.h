@@ -23,10 +23,10 @@ public:
 			return "";
 		}
 
-		std::stringstream buffer;
-		buffer << file.rdbuf();
+		std::stringstream vertexBuffer;
+		vertexBuffer << file.rdbuf();
 		file.close();
-		return buffer.str();
+		return vertexBuffer.str();
 	}
 	static string GetWorkingDir()
 	{

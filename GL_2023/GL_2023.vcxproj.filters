@@ -33,4 +33,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\defaultFragment.glsl">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="Shaders\defaultVertex.glsl">
+      <Filter>Source Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>

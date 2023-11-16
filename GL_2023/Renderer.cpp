@@ -3,8 +3,10 @@
 #include "Renderer.h"
 #include "FileLoader.h"
 
+
 GLFWwindow* window;
-unsigned int buffer;
+unsigned int vertexBuffer;
+unsigned int indexBuffer;
 unsigned int shader;
 
 int Renderer::Initialize()
@@ -19,7 +21,7 @@ int Renderer::Initialize()
 
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(640, 480, "MY NAME IS OWAN AND IM COOL", NULL, NULL);
+    window = glfwCreateWindow(800, 400, "MY NAME IS OWAN AND IM COOL", NULL, NULL);
     if (!window)
     {
         std::cout << "failed to initialize window";
@@ -44,49 +46,56 @@ int Renderer::Initialize()
 
 
     //create buffer
-    float verticies[6] =
+    float verticies[] =
     {
 
         -0.5f,-0.5f,
         0.0f,0.5f,
-        0.5f,-0.5f
+        0.5f,-0.5f,
+        -0.5f,0.5f
 
     };
 
-    glGenBuffers(1, &buffer);
-    glBindBuffer(GL_ARRAY_BUFFER, buffer);
-    glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), verticies, GL_STATIC_DRAW);//buffer size
+    unsigned int indicies[] =
+    {
+        0,1,2,
+        2,3,0
+    };
 
+    //vertex buffer
+    glGenBuffers(1, &vertexBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(float), verticies, GL_STATIC_DRAW);//buffer size
 
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2.0f, 0);
     glEnableVertexAttribArray(0);
 
-    glBindBuffer(GL_ARRAY_BUFFER, buffer);
 
+    //index buffer
+    glGenBuffers(1, &indexBuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), indicies, GL_STATIC_DRAW);//buffer size
+
+
+    
+
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+
+    
     //create shaders
-    std::string path = FileLoader::GetWorkingDir() + "/Shaders/test.txt";
-    FileLoader::GetFileContents(path);
-
-    std::string fragmentShader =
-        "#version 330 core\n"
-        "\n"
-        "layout(location = 0) out vec4 color;\n"
-        "void main()\n"
-        "{\n"
-        "   color = vec4(1.0, 1.0, 0.0, 0.0);\n"
-        "}\n";
-
-    std::string vertexShader =
-        "#version 330 core\n"
-        "\n"
-        "layout(location = 0) in vec4 position;\n"
-        "void main()\n"
-        "{\n"
-        "   gl_Position = position;\n"
-        "}\n";
+    std::string path = FileLoader::GetWorkingDir() + "/Shaders/";
+    
+    std::string fragmentShader = FileLoader::GetFileContents(path + "defaultFragment.glsl");
+    std::string vertexShader = FileLoader::GetFileContents(path + "defaultVertex.glsl");
 
     shader = Renderer::createShader(vertexShader, fragmentShader);
     glUseProgram(shader);
+
+    int location = glGetUniformLocation(shader, "u_Color");
+    if (location == -1)
+        std::cout << "uniform not found";
+    else
+        glUniform4f(location, 0.2f, 0.3f, 0.5f, 1.0f);
 
     return 0;
 }
@@ -98,7 +107,7 @@ void Renderer::Destroy()
 int Renderer::Render() //returns -1 to quit window
 {
     glClear(GL_COLOR_BUFFER_BIT);
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT,nullptr);
 
     /* Swap front and back buffers */
     glfwSwapBuffers(window);
