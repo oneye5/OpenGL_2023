@@ -9,7 +9,7 @@ Renderer renderer;
 int InitializeApplication()
 {
 	
-	return renderer.Initialize();;
+	return renderer.Initialize();
 }
 int ApplicationLoop()
 {
@@ -25,6 +25,6 @@ int main(void)
 		return -1;
 	}
 	while(ApplicationLoop()==0){}
-
+	renderer.Destroy();
 	return 0;
 }
