@@ -3,15 +3,10 @@
 #include "Renderer.h"
 #include "FileLoader.h"
 
-#include "VertexBuffer.h"
-#include "IndexBuffer.h"
-
 
 GLFWwindow* window;
-
-VertexBuffer* vertexBuffer;
-IndexBuffer* indexBuffer;
-
+unsigned int vertexBuffer;
+unsigned int indexBuffer;
 unsigned int shader;
 unsigned int vertexArrayObject;
 
@@ -76,13 +71,17 @@ int Renderer::Initialize()
     glBindVertexArray(vertexArrayObject);
 
     //vertex buffer
-    vertexBuffer = new VertexBuffer(verticies,4*2*sizeof(float));
+    glGenBuffers(1, &vertexBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(float), verticies, GL_STATIC_DRAW);//buffer size
 
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2.0, 0);
 
     //index buffer
-    indexBuffer = new IndexBuffer(indicies, 6);
+    glGenBuffers(1, &indexBuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), indicies, GL_STATIC_DRAW);//buffer size
 
 
     
@@ -116,7 +115,7 @@ int Renderer::Render() //returns -1 to quit window
         glUniform4f(location, 0.2f, 0.3f, 0.5f, 1.0f);
 
     glBindVertexArray(vertexArrayObject);
-    indexBuffer->Bind();
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
 
 
     glClear(GL_COLOR_BUFFER_BIT);
