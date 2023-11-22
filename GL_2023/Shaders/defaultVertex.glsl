@@ -1,12 +1,12 @@
 #version 330 core
 
-layout(location = 0) in vec4 position;
-//uniform mat4 ProjectionMatrix;
-//uniform mat4 ViewMatrix;
-//uniform mat4 ModelMatrix;
+in vec4 position;
+uniform mat4 V_ProjectionMatrix;
+uniform mat4 V_ViewMatrix;
+uniform mat4 V_ModelMatrix;
 
 void main()
 {
-
-	gl_Position =  position;
+	mat4 finalMat = V_ProjectionMatrix*V_ViewMatrix*V_ModelMatrix;
+	gl_Position = finalMat * position;
 }

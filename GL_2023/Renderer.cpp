@@ -1,20 +1,19 @@
 
 
 #include "Renderer.h"
-#include "FileLoader.h"
 #include "Camera.h"
-
+#include "ShaderWrapper.h"
 
 GLFWwindow* window;
 unsigned int vertexBuffer;
 unsigned int indexBuffer;
-unsigned int shader;
 unsigned int vertexArrayObject;
 
 const int screenWidth = 1600;
 const int screenHeight = 900;
 
 Camera cam(screenWidth,screenHeight);
+ShaderWrapper shader;
 
 void debugMessage(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length,
     const GLchar* message, const void* userParam)
@@ -98,19 +97,8 @@ int Renderer::Initialize()
  
 
     InitBuffers(verticies, indicies);
+    shader.LoadShaders();
     
-    //create shaders
-    std::string path = FileLoader::GetWorkingDir() + "/Shaders/";
-    
-    std::string fragmentShader = FileLoader::GetFileContents(path + "defaultFragment.glsl");
-    std::string vertexShader = FileLoader::GetFileContents(path + "defaultVertex.glsl");
-
-    shader = Renderer::createShader(vertexShader, fragmentShader);
-
-
-    
-
-   
     return 0;
 }
 void Renderer::InitBuffers(std::vector<float> verticies,std::vector<unsigned int> indicies)
@@ -135,18 +123,15 @@ void Renderer::InitBuffers(std::vector<float> verticies,std::vector<unsigned int
 }
 void Renderer::Destroy()
 {
-    glDeleteProgram(shader);
+    glDeleteProgram(shader.Shader);
     glfwTerminate();
 }
 int Renderer::Render() //returns -1 to quit window
 {
     //opengl stuff
-    glUseProgram(shader);
-    int location = glGetUniformLocation(shader, "ProjectionMatrix");
-    //if (location == -1)
-    //    std::cout << "uniform not found";
-    //else
-    //   glUniformMatrix4fv(location, 1, GL_FALSE,glm::value_ptr( cam.projectionMatrix));
+    glUseProgram(shader.Shader);
+   
+    shader.UpdateMatricies(cam.projectionMatrix,cam.viewMatrix,glm::mat4(1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1));
 
     glBindVertexArray(vertexArrayObject);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);

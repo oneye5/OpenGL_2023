@@ -141,6 +141,7 @@
     <ClInclude Include="FileLoader.h" />
     <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="ShaderWrapper.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\defaultFragment.glsl" />
