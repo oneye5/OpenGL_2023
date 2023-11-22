@@ -42,8 +42,9 @@ public:
 	}
 	Camera(int w, int h)
 	{
+		screenWidth = w; screenHeight = h;
 		updateRotation();
 		makeView();
-		//makeProjectionMatrix();
+		makeProjectionMatrix();
 	}
 };

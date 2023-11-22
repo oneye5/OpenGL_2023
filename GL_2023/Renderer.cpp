@@ -143,10 +143,10 @@ int Renderer::Render() //returns -1 to quit window
     //opengl stuff
     glUseProgram(shader);
     int location = glGetUniformLocation(shader, "ProjectionMatrix");
-    if (location == -1)
-        std::cout << "uniform not found";
+    //if (location == -1)
+    //    std::cout << "uniform not found";
     //else
-      //  glUniformMatrix4fv(location, 1, GL_FALSE,glm::value_ptr( cam.projectionMatrix));
+    //   glUniformMatrix4fv(location, 1, GL_FALSE,glm::value_ptr( cam.projectionMatrix));
 
     glBindVertexArray(vertexArrayObject);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
