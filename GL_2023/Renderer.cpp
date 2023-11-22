@@ -2,6 +2,7 @@
 
 #include "Renderer.h"
 #include "FileLoader.h"
+#include "Camera.h"
 
 
 GLFWwindow* window;
@@ -9,6 +10,26 @@ unsigned int vertexBuffer;
 unsigned int indexBuffer;
 unsigned int shader;
 unsigned int vertexArrayObject;
+
+const int screenWidth = 1600;
+const int screenHeight = 900;
+
+Camera cam(screenWidth,screenHeight);
+
+void debugMessage(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length,
+    const GLchar* message, const void* userParam)
+{
+    string sourceStr, severityStr;
+    switch (source)
+    {
+    case GL_DEBUG_SOURCE_API: sourceStr = "API";
+    case GL_DEBUG_SOURCE_WINDOW_SYSTEM: sourceStr = "WINDOW";
+    default: sourceStr = source;
+    }
+
+
+    std::cout << " source: " << sourceStr << " severity: " << severity << " mesage: " << message << "\n";
+}
 
 int Renderer::Initialize()
 {
@@ -26,7 +47,7 @@ int Renderer::Initialize()
 
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(800, 400, "MY NAME IS OWAN AND IM COOL", NULL, NULL);
+    window = glfwCreateWindow(screenWidth, screenHeight, "MY NAME IS OWAN AND IM COOL", NULL, NULL);
     if (!window)
     {
         std::cout << "failed to initialize window";
@@ -50,40 +71,33 @@ int Renderer::Initialize()
 
 
 
+
+
+    glEnable(GL_DEBUG_OUTPUT);
+    glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+    glDebugMessageCallback(debugMessage, NULL);
+    glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, NULL, GL_TRUE);
+
+
+
     //create buffer
-    float verticies[] =
+    std::vector<float> verticies =
     {
 
-        -0.5f,-0.5f,
-        0.0f,0.5f,
-        0.5f,-0.5f,
-        -0.5f,0.5f
+        -0.5f,0.5f,0.0f,
+        0.5f,0.5f,0.0f,
+        0.5f,-0.5f,0.0f,
+        -0.5f,-0.5f,0.0f
 
     };
-
-    unsigned int indicies[] =
+    std::vector<unsigned int> indicies = 
     {
         0,1,2,
-        2,3,0
+        2,3,0 
     };
+ 
 
-    glGenVertexArrays(1, &vertexArrayObject);
-    glBindVertexArray(vertexArrayObject);
-
-    //vertex buffer
-    glGenBuffers(1, &vertexBuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(float), verticies, GL_STATIC_DRAW);//buffer size
-
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2.0, 0);
-
-    //index buffer
-    glGenBuffers(1, &indexBuffer);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), indicies, GL_STATIC_DRAW);//buffer size
-
-
+    InitBuffers(verticies, indicies);
     
     //create shaders
     std::string path = FileLoader::GetWorkingDir() + "/Shaders/";
@@ -96,8 +110,28 @@ int Renderer::Initialize()
 
     
 
-
+   
     return 0;
+}
+void Renderer::InitBuffers(std::vector<float> verticies,std::vector<unsigned int> indicies)
+{
+    glGenVertexArrays(1, &vertexArrayObject);
+    glBindVertexArray(vertexArrayObject);
+
+    //vertex buffer
+    glGenBuffers(1, &vertexBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+    glBufferData(GL_ARRAY_BUFFER, verticies.size() * sizeof(float), verticies.data(), GL_STATIC_DRAW);//buffer size
+
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,/*stride*/ sizeof(float) * 3.0, 0);
+    //          index size type normalized stride                         
+    //index buffer
+    glGenBuffers(1, &indexBuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicies.size() * sizeof(unsigned int), indicies.data(), GL_STATIC_DRAW);//buffer size
+
+   
 }
 void Renderer::Destroy()
 {
@@ -108,11 +142,11 @@ int Renderer::Render() //returns -1 to quit window
 {
     //opengl stuff
     glUseProgram(shader);
-    int location = glGetUniformLocation(shader, "u_Color");
+    int location = glGetUniformLocation(shader, "ProjectionMatrix");
     if (location == -1)
         std::cout << "uniform not found";
-    else
-        glUniform4f(location, 0.2f, 0.3f, 0.5f, 1.0f);
+    //else
+      //  glUniformMatrix4fv(location, 1, GL_FALSE,glm::value_ptr( cam.projectionMatrix));
 
     glBindVertexArray(vertexArrayObject);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);

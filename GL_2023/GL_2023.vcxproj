@@ -137,7 +137,9 @@
     <ClCompile Include="Renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="FileLoader.h" />
+    <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="Renderer.h" />
   </ItemGroup>
   <ItemGroup>
