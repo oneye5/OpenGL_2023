@@ -1,7 +1,6 @@
 
 
 #include "Renderer.h"
-#include "Camera.h"
 #include "ShaderWrapper.h"
 
 GLFWwindow* window;
@@ -96,6 +95,7 @@ int Renderer::Initialize()
     };
  
 
+    ActiveCamera = &cam;
     InitBuffers(verticies, indicies);
     shader.LoadShaders();
     
@@ -131,7 +131,7 @@ int Renderer::Render() //returns -1 to quit window
     //opengl stuff
     glUseProgram(shader.Shader);
    
-    shader.UpdateMatricies(cam.projectionMatrix,cam.viewMatrix,glm::mat4(1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1));
+    shader.UpdateMatricies(cam.projectionMatrix,cam.viewMatrix,glm::mat4(1.0f));
 
     glBindVertexArray(vertexArrayObject);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
