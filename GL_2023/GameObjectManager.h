@@ -1,7 +1,8 @@
 #pragma once
 #include <vector>
 #include "GameObject.h"
-
+#include "Renderer.h"
+#include "InputManager.h"
 
 /*
 			IMPORTANT NOTE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -13,6 +14,15 @@
 class GameObjectManager
 {
 public:
+	Renderer *renderer;
+	InputManager *input;
+
+	GameObjectManager(Renderer* r, InputManager* i)
+	{
+		renderer = r;
+		input = i;
+	}
+
 	std::vector<GameObject*> GameObjects;
 	void AddObject(GameObject* obj)
 	{
@@ -29,6 +39,7 @@ public:
 	
 	void UpdateObjects()
 	{
+		std::cout << "aaaaaaa";
 		for (auto obj : GameObjects)
 		{
 			if (obj->Active)
