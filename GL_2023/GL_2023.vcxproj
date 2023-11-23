@@ -135,6 +135,7 @@
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="Systems.cpp" />
     <ClCompile Include="testObject.h" />
   </ItemGroup>
   <ItemGroup>
@@ -147,6 +148,7 @@
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="ShaderWrapper.h" />
+    <ClInclude Include="Systems.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\defaultFragment.glsl" />

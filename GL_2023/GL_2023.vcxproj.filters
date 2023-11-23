@@ -19,6 +19,9 @@
     <Filter Include="Source Files\GameObjects">
       <UniqueIdentifier>{c35c1c32-fa06-47c9-aaf3-0b644c6fd24c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{fbb17fc3-1d1d-40e7-a603-622d667ef66c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">
@@ -29,6 +32,9 @@
     </ClCompile>
     <ClCompile Include="testObject.h">
       <Filter>Source Files\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -59,13 +65,16 @@
     <ClInclude Include="InputManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Systems.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\defaultFragment.glsl">
-      <Filter>Source Files</Filter>
-    </None>
     <None Include="Shaders\defaultVertex.glsl">
-      <Filter>Source Files</Filter>
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\defaultFragment.glsl">
+      <Filter>Shaders</Filter>
     </None>
   </ItemGroup>
 </Project>

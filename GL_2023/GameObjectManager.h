@@ -1,9 +1,6 @@
 #pragma once
 #include <vector>
 #include "GameObject.h"
-#include "Renderer.h"
-#include "InputManager.h"
-
 /*
 			IMPORTANT NOTE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 			ALL GAMEOBJECT CLASSES MUST BE INCLUDED IN THIS FILE, AS WELL AS ADDED TO "INSTANCIATE ON RUN" METHOD
@@ -14,14 +11,6 @@
 class GameObjectManager
 {
 public:
-	Renderer *renderer;
-	InputManager *input;
-
-	GameObjectManager(Renderer* r, InputManager* i)
-	{
-		renderer = r;
-		input = i;
-	}
 
 	std::vector<GameObject*> GameObjects;
 	void AddObject(GameObject* obj)
@@ -29,17 +18,11 @@ public:
 		GameObjects.push_back(obj);
 		obj->Awake();
 	}
-	GameObjectManager()
-	{
-		InstanciateObjectsOnRun();
-		init();
-	}
-
 
 	
 	void UpdateObjects()
 	{
-		std::cout << "aaaaaaa";
+		std::cout << GameObjects.size()<<std::endl;
 		for (auto obj : GameObjects)
 		{
 			if (obj->Active)
@@ -48,7 +31,15 @@ public:
 			}
 		}
 	}
-	
+
+	void init()
+	{
+		InstanciateObjectsOnRun();
+		for (auto obj : GameObjects)
+		{
+			obj->Start();
+		}
+	}
 private:
 	
 	std::vector<GameObject*> ToCallAwakeIndex;	
@@ -59,13 +50,7 @@ private:
 		AddObject(new testObject());
 	}
 
-	void init()
-	{
-		for (auto obj : GameObjects)
-		{
-			obj->Start();
-		}
-	}
+	
 	
 
 };

@@ -1,38 +1,29 @@
-#include<iostream>
 #include "Renderer.h"
 #include "GameObjectManager.h"
-#include <vector>
 #include "InputManager.h"
+#include "Systems.h"
 
-//This file contains the main function, it calls initialization methods and update for all the important systems
-
-
-//program components
 Renderer renderer;
 InputManager inputManager;
-GameObjectManager  objectManager(&renderer,&inputManager);
+GameObjectManager  objectManager;
 int InitializeApplication()
 {
-	
+	ENGINE_SYSTEMS::INPUT_CLASS = static_cast<void*>(&inputManager);
+	ENGINE_SYSTEMS::RENDERER_CLASS = static_cast<void*>(&renderer);
 
+	objectManager.init();
 	return 0;
 }
 int ApplicationLoop()
 {
 	objectManager.UpdateObjects();
 	return renderer.Render();
-}
 
+}
 int main(void)
 {
-
-	if (InitializeApplication() != 0)
-	{
-		std::cout << "failed to initialize (Application)";
-		return -1;
-	}
+	InitializeApplication();
 	while(ApplicationLoop()==0){}
 
 	return 0;
 }
- 
