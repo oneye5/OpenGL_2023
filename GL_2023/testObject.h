@@ -1,14 +1,18 @@
 #include "GameObject.h"
 #include <iostream>
 #include "InputManager.h"
+#include "Renderer.h"
 class testObject : public GameObject
 {
 public:
 	virtual void Update(float ms) override
 	{
-		std::cout << "update "<<std::endl;
-		auto x = ENGINE_SYSTEMS::GET_INPUTMANAGER();
-		std::cout<<" w key pressed " << x->GetKey('w');
+		auto Inputs = ENGINE_SYSTEMS::GET_INPUTMANAGER();
+		auto renderer = ENGINE_SYSTEMS::GET_RENDERER();
+		auto moveBy = Inputs->GetMoveVector();
+		renderer->ActiveCamera->pos += moveBy;
+		std::cout << "currnet cam pos " << renderer->ActiveCamera->pos.x << " " << renderer->ActiveCamera->pos.y << " " << renderer->ActiveCamera->pos.z << std::endl;
+
 	}
 	virtual void Awake() override
 	{

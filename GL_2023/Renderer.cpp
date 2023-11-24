@@ -84,12 +84,17 @@ int Renderer::Initialize()
     std::vector<float> verticies =
     {
 
-        -0.5f,0.5f,0.0f,
-        0.5f,0.5f,0.0f,
-        0.5f,-0.5f,0.0f,
-        -0.5f,-0.5f,0.0f
+        -0.5f,0.5f,1.0f,
+        0.5f,0.5f,1.0f,
+        0.5f,-0.5f,1.0f,
+        -0.5f,-0.5f,1.0f
 
     };
+
+    for (auto& x : verticies)
+    {
+        x *= 1.0f;
+    }
     std::vector<unsigned int> indicies = 
     {
         0,1,2,

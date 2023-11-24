@@ -3,6 +3,9 @@
 #include "InputManager.h"
 #include "Systems.h"
 
+//this file contains the main file and handles the game loop
+
+
 Renderer renderer;
 InputManager inputManager;
 GameObjectManager  objectManager;
@@ -16,6 +19,7 @@ int InitializeApplication()
 }
 int ApplicationLoop()
 {
+	inputManager.Tick();
 	objectManager.UpdateObjects();
 	return renderer.Render();
 

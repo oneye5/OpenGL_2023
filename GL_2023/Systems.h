@@ -1,5 +1,8 @@
 #pragma once
-//this is used to expose gameobjects to the core systems of the engine without creating dependency or memory issues
+
+
+//	THE PURPOSE OF THIS CLASS IS TO EXPOSE THE CORE SYSTEMS OF THE ENGINE WITHOUT NEEDING TO INCLUDE THEM AND PASS REFERENCES.
+//  THIS APROACH REQUIRES SYSTEMS.H TO BE INCLUDED AS WELL AS ANY OF THE DESIRED SYSTEMS THAT NEED TO BE USED
 class Renderer;
 class InputManager;
 static struct ENGINE_SYSTEMS

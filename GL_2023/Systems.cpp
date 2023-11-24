@@ -6,9 +6,13 @@ void* ENGINE_SYSTEMS::INPUT_CLASS = nullptr;
 
 Renderer* ENGINE_SYSTEMS::GET_RENDERER()
 {
+	if (RENDERER_CLASS == nullptr)
+		std::cout << "SYSTEM IS A NULLPTR, MAKE SURE IT IS ASSIGNED IN APPLICATION.CPP";
 	return static_cast<Renderer*>(RENDERER_CLASS);
 }
 InputManager* ENGINE_SYSTEMS::GET_INPUTMANAGER()
 {
+	if (INPUT_CLASS == nullptr)
+	std::cout << "SYSTEM IS A NULLPTR, MAKE SURE IT IS ASSIGNED IN APPLICATION.CPP";
 	return static_cast<InputManager*>(INPUT_CLASS);
 }

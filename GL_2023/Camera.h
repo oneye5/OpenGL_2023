@@ -46,5 +46,25 @@ public:
 		updateRotation();
 		makeView();
 		makeProjectionMatrix();
+		printMatrices();
+
+	}
+	void printMatrices()
+	{
+		std::cout << "View Matrix:" << std::endl;
+		for (int i = 0; i < 4; ++i) {
+			for (int j = 0; j < 4; ++j) {
+				std::cout << viewMatrix[i][j] << " ";
+			}
+			std::cout << std::endl;
+		}
+
+		std::cout << "Projection Matrix:" << std::endl;
+		for (int i = 0; i < 4; ++i) {
+			for (int j = 0; j < 4; ++j) {
+				std::cout << projectionMatrix[i][j] << " ";
+			}
+			std::cout << std::endl;
+		}
 	}
 };
