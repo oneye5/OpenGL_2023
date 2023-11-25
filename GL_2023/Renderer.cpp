@@ -138,7 +138,8 @@ int Renderer::Render() //returns -1 to quit window
     //opengl stuff
     glUseProgram(shader.Shader);
    
-    shader.UpdateMatricies(cam.projectionMatrix,cam.viewMatrix,glm::mat4(1.0f));
+    ActiveCamera->updateRotation(); ActiveCamera->makeView();
+    shader.UpdateMatricies(cam.projectionMatrix,glm::mat4(1.0f), cam.viewMatrix);
 
     glBindVertexArray(vertexArrayObject);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);

@@ -5,11 +5,13 @@
 #include <GLM/glm-master/glm/gtc/type_ptr.hpp>
 
 
+
+
 class Camera
 {
 public:
 	glm::vec3 pos = glm::vec3(0.0f, 0.0f, 0.0f);
-	glm::vec3 rot = glm::vec3(0.0f,90.0f,0.0f);
+	glm::vec3 rot = glm::vec3(45.0f,45.0f,0.0f);
 
 	glm::vec3 front;
 	glm::vec3 up;
@@ -23,9 +25,24 @@ public:
 	glm::mat4 projectionMatrix;
 	glm::mat4 viewMatrix;
 
+
+	glm::vec3 rayFromAngle(glm::vec3 A)
+	{
+		// Convert degrees to radians
+		float radiansX = glm::radians(A.x);
+		float radiansY = glm::radians(A.y);
+
+		// Calculate direction vector
+		float x = sinf(radiansX) * cosf(radiansY);
+		float y = sinf(radiansX) * sinf(radiansY);
+		float z = cosf(radiansX);
+
+		return glm::vec3(x, y, z);
+	}
+
 	void makeView() 
 	{
-		viewMatrix = glm::lookAt(pos, pos + front, up);
+		viewMatrix = glm::lookAt(pos, front, up);
 	}
 	void makeProjectionMatrix()
 	{
@@ -33,12 +50,10 @@ public:
 	}
 	void updateRotation()
 	{
-		glm::vec3 direction;
-		direction.x = cos(glm::radians(rot.y)) * cos(glm::radians(rot.x));
-		direction.y = sin(glm::radians(rot.x));
-		direction.z = sin(glm::radians(rot.y)) * cos(glm::radians(rot.x));
-		front = glm::normalize(direction);
-		makeView();
+		front = rayFromAngle(rot);
+		// Calculate a temporary right vector perpendicular to the front and the world up vector
+		glm::vec3 right = glm::normalize(glm::cross(front, glm::vec3(0.0f, 1.0f, 0.0f)));
+		up = glm::normalize(glm::cross(right, front));
 	}
 	Camera(int w, int h)
 	{

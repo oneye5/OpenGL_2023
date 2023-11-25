@@ -10,8 +10,8 @@ public:
 		auto Inputs = ENGINE_SYSTEMS::GET_INPUTMANAGER();
 		auto renderer = ENGINE_SYSTEMS::GET_RENDERER();
 		auto moveBy = Inputs->GetMoveVector();
-		renderer->ActiveCamera->pos += moveBy;
-		std::cout << "currnet cam pos " << renderer->ActiveCamera->pos.x << " " << renderer->ActiveCamera->pos.y << " " << renderer->ActiveCamera->pos.z << std::endl;
+		renderer->ActiveCamera->rot += moveBy;
+		std::cout << "currnet cam pos " << renderer->ActiveCamera->rot.x << " " << renderer->ActiveCamera->rot.y << " " << renderer->ActiveCamera->rot.z << std::endl;
 
 	}
 	virtual void Awake() override

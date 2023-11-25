@@ -9,7 +9,7 @@ void main()
 {
 	mat4 finalMat = V_ProjectionMatrix*V_ViewMatrix;
 	vec4 newPos = (position* finalMat );
-	newPos +=  position;
+	//newPos +=  position;
 	newPos.z = 0.0;
 	newPos.w = 1.0;
 	gl_Position = newPos;
