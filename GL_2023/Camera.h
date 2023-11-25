@@ -29,15 +29,14 @@ public:
 	glm::vec3 rayFromAngle(glm::vec3 A)
 	{
 		// Convert degrees to radians
-		float radiansX = glm::radians(A.x);
-		float radiansY = glm::radians(A.y);
+		float yaw = glm::radians(A.y);
+		float pitch = glm::radians(A.x);
+		float x, y, z;
+		x = sinf(yaw) * cosf(pitch);
+		y = sinf(pitch);
+		z = cosf(yaw) * cosf(pitch);
 
-		// Calculate direction vector
-		float x = sinf(radiansX) * cosf(radiansY);
-		float y = sinf(radiansX) * sinf(radiansY);
-		float z = cosf(radiansX);
-
-		return glm::vec3(x, y, z);
+		return  glm::vec3(x, y, z);
 	}
 
 	void makeView() 
