@@ -11,16 +11,16 @@ class Camera
 {
 public:
 	glm::vec3 pos = glm::vec3(0.0f, 0.0f, 0.0f);
-	glm::vec3 rot = glm::vec3(45.0f,45.0f,0.0f);
+	glm::vec3 rot = glm::vec3(0.0f,0.0f,0.0f);
 
 	glm::vec3 front;
 	glm::vec3 up;
 
 	int screenWidth;
 	int screenHeight;
-	const float nearPlane = 0.1f;
-	const float farPlane = 1.0f;
-	const float fov = 90.0f;
+	const float nearPlane = 0.001f;
+	const float farPlane = 1000.0f;
+	const float fov = 100.0f;
 	
 	glm::mat4 projectionMatrix;
 	glm::mat4 viewMatrix;
@@ -41,7 +41,7 @@ public:
 
 	void makeView() 
 	{
-		viewMatrix = glm::lookAt(pos, front, up);
+		viewMatrix = glm::lookAt(pos, pos + front, up);
 	}
 	void makeProjectionMatrix()
 	{
@@ -60,25 +60,5 @@ public:
 		updateRotation();
 		makeView();
 		makeProjectionMatrix();
-		printMatrices();
-
-	}
-	void printMatrices()
-	{
-		std::cout << "View Matrix:" << std::endl;
-		for (int i = 0; i < 4; ++i) {
-			for (int j = 0; j < 4; ++j) {
-				std::cout << viewMatrix[i][j] << " ";
-			}
-			std::cout << std::endl;
-		}
-
-		std::cout << "Projection Matrix:" << std::endl;
-		for (int i = 0; i < 4; ++i) {
-			for (int j = 0; j < 4; ++j) {
-				std::cout << projectionMatrix[i][j] << " ";
-			}
-			std::cout << std::endl;
-		}
 	}
 };

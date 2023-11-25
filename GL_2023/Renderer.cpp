@@ -81,24 +81,27 @@ int Renderer::Initialize()
 
 
     //create buffer
-    std::vector<float> verticies =
-    {
+    std::vector<float> verticies = {
+        // Front face
+        -0.5f, -0.5f,  0.5f,
+         0.5f, -0.5f,  0.5f,
+         0.5f,  0.5f,  0.5f,
+        -0.5f,  0.5f,  0.5f,
 
-        -0.5f,0.5f,1.0f,
-        0.5f,0.5f,1.0f,
-        0.5f,-0.5f,1.0f,
-        -0.5f,-0.5f,1.0f
-
+        // Back face
+        -0.5f, -0.5f, -0.5f,
+         0.5f, -0.5f, -0.5f,
+         0.5f,  0.5f, -0.5f,
+        -0.5f,  0.5f, -0.5f
     };
 
-    for (auto& x : verticies)
-    {
-        x *= 1.0f;
-    }
-    std::vector<unsigned int> indicies = 
-    {
-        0,1,2,
-        2,3,0 
+    std::vector<unsigned int> indicies = {
+        0, 1, 2,  0, 2, 3,    // Front face
+        4, 5, 6,  4, 6, 7,    // Back face
+        0, 3, 7,  0, 7, 4,    // Left face
+        1, 2, 6,  1, 6, 5,    // Right face
+        0, 1, 5,  0, 5, 4,    // Bottom face
+        2, 3, 7,  2, 7, 6     // Top face
     };
  
 
@@ -113,20 +116,18 @@ void Renderer::InitBuffers(std::vector<float> verticies,std::vector<unsigned int
     glGenVertexArrays(1, &vertexArrayObject);
     glBindVertexArray(vertexArrayObject);
 
-    //vertex buffer
+    // Vertex buffer
     glGenBuffers(1, &vertexBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, verticies.size() * sizeof(float), verticies.data(), GL_STATIC_DRAW);//buffer size
+    glBufferData(GL_ARRAY_BUFFER, verticies.size() * sizeof(float), verticies.data(), GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,/*stride*/ sizeof(float) * 3.0, 0);
-    //          index size type normalized stride                         
-    //index buffer
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, 0);
+
+    // Index buffer
     glGenBuffers(1, &indexBuffer);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicies.size() * sizeof(unsigned int), indicies.data(), GL_STATIC_DRAW);//buffer size
-
-   
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicies.size() * sizeof(unsigned int), indicies.data(), GL_STATIC_DRAW);
 }
 void Renderer::Destroy()
 {
@@ -146,7 +147,7 @@ int Renderer::Render() //returns -1 to quit window
 
 
     glClear(GL_COLOR_BUFFER_BIT);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT,nullptr);
+    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT,nullptr);
 
     /* Swap front and back buffers */
     glfwSwapBuffers(window);

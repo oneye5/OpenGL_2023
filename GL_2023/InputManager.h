@@ -19,16 +19,17 @@ class InputManager
 {
 private:
 	std::unordered_map<char, bool> keyStates;
+	std::string keys = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 public:
 	
 	
 	void Tick() //update all key states
 	{
-		for (char i = 'a'; i <= 'z'; i++) 
-			keyStates[i] = (GetKeyState(i) < 0);
 		
-		for (char i = '0'; i <= '9'; i++) 
-			keyStates[i] = (GetKeyState(i) < 0);
+		for (auto key : keys) 
+			keyStates[key] = (GetKeyState(key) < 0);
+		
+		
 		//special chars
 		keyStates[SPACEBAR] = (GetKeyState(VK_SPACE) < 0);
 		keyStates[ESCAPE] = (GetKeyState(VK_ESCAPE) < 0);
@@ -51,6 +52,8 @@ public:
 
 	bool GetKey(char key)
 	{
+		if (keyStates[key])
+			std::cout << key;
 		return keyStates[key];
 	}	
 	glm::vec3 GetNormalizedMove()
@@ -65,16 +68,16 @@ public:
 	{
 		auto out = glm::vec3(0.0f);
 
-		if (GetKey(UP_ARROW) || GetKey('w'))
+		if (GetKey(UP_ARROW) || GetKey('W'))
 			out.z++;
 
-		if (GetKey(DOWN_ARROW || GetKey('s')))
+		if (GetKey(DOWN_ARROW) || GetKey('S'))
 			out.z--;
 
-		if (GetKey(RIGHT_ARROW) || GetKey('d'))
+		if (GetKey(RIGHT_ARROW) || GetKey('D'))
 			out.x++;
 
-		if (GetKey(LEFT_ARROW) || GetKey('a'))
+		if (GetKey(LEFT_ARROW) || GetKey('A'))
 			out.x--;
 
 		if (GetKey(SPACEBAR))

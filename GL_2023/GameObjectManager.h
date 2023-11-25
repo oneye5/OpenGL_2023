@@ -22,7 +22,6 @@ public:
 	
 	void UpdateObjects()
 	{
-		std::cout << GameObjects.size()<<std::endl;
 		for (auto obj : GameObjects)
 		{
 			if (obj->Active)
