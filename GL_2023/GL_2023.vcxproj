@@ -104,12 +104,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)dependencies;%(AdditionalIncludeDirectories);$(SolutionDir)dependencies\GLEW\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)GL_2023\Source\Engine\Misc_Systems;$(SolutionDir)GL_2023\Source\Engine\GameObjectManagement;$(SolutionDir)GL_2023\Source\Engine\GameObject\Components;$(SolutionDir)GL_2023\Source\Engine\GameObject;$(SolutionDir)GL_2023\Source\Engine\Engine_Core;$(SolutionDir)GL_2023\Source\Client_Assets;$(SolutionDir)GL_2023\Source\Engine\Renderer;$(SolutionDir)dependencies;%(AdditionalIncludeDirectories);$(SolutionDir)dependencies\GLEW\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)dependencies/lib;%(AdditionalLibraryDirectories);$(SolutionDir)dependencies\GLEW\lib\Release\x64</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)GL_2023/Source;$(SolutionDir)dependencies/lib;%(AdditionalLibraryDirectories);$(SolutionDir)dependencies\GLEW\lib\Release\x64</AdditionalLibraryDirectories>
       <AdditionalDependencies>glew32s.lib;glfw3.lib;opengl32.lib;User32.lib;Gdi32.lib;Shell32.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -121,41 +121,39 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)dependencies;%(AdditionalIncludeDirectories);$(SolutionDir)dependencies\GLEW\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)GL_2023\Source\Engine\Misc_Systems;$(SolutionDir)GL_2023\Source\Engine\GameObjectManagement;$(SolutionDir)GL_2023\Source\Engine\GameObject\Components;$(SolutionDir)GL_2023\Source\Engine\GameObject;$(SolutionDir)GL_2023\Source\Engine\Engine_Core;$(SolutionDir)GL_2023\Source\Client_Assets;$(SolutionDir)GL_2023\Source\Engine\Renderer;$(SolutionDir)dependencies;%(AdditionalIncludeDirectories);$(SolutionDir)dependencies\GLEW\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)dependencies/lib;%(AdditionalLibraryDirectories);$(SolutionDir)dependencies\GLEW\lib\Release\x64</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)GL_2023/Source;$(SolutionDir)dependencies/lib;%(AdditionalLibraryDirectories);$(SolutionDir)dependencies\GLEW\lib\Release\x64</AdditionalLibraryDirectories>
       <AdditionalDependencies>glew32s.lib;glfw3.lib;opengl32.lib;User32.lib;Gdi32.lib;Shell32.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Application.cpp" />
-    <ClCompile Include="Renderer.cpp" />
-    <ClCompile Include="Systems.cpp" />
-    <ClCompile Include="testObject.h" />
+    <ClCompile Include="Source\Engine\Engine_Core\Application.cpp" />
+    <ClCompile Include="Source\Engine\Engine_Core\Systems.cpp" />
+    <ClCompile Include="Source\Engine\Renderer\Renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="Component.h" />
-    <ClInclude Include="FileLoader.h" />
-    <ClInclude Include="GameObject.h" />
-    <ClInclude Include="GameObjectManager.h" />
-    <ClInclude Include="IndexBuffer.h" />
-    <ClInclude Include="InputManager.h" />
-    <ClInclude Include="Mesh.h" />
-    <ClInclude Include="Renderer.h" />
-    <ClInclude Include="Scene.h" />
-    <ClInclude Include="ShaderWrapper.h" />
-    <ClInclude Include="Systems.h" />
-    <ClInclude Include="Transform.h" />
+    <ClInclude Include="Source\Client_Assets\testObject.h" />
+    <ClInclude Include="Source\Engine\Engine_Core\InputManager.h" />
+    <ClInclude Include="Source\Engine\Engine_Core\Systems.h" />
+    <ClInclude Include="Source\Engine\GameObjectManagement\GameObjectManager.h" />
+    <ClInclude Include="Source\Engine\GameObject\Components\Component.h" />
+    <ClInclude Include="Source\Engine\GameObject\Components\Mesh.h" />
+    <ClInclude Include="Source\Engine\GameObject\Components\Transform.h" />
+    <ClInclude Include="Source\Engine\GameObject\GameObject.h" />
+    <ClInclude Include="Source\Engine\Misc_Systems\FileLoader.h" />
+    <ClInclude Include="Source\Engine\Renderer\Camera.h" />
+    <ClInclude Include="Source\Engine\Renderer\Renderer.h" />
+    <ClInclude Include="Source\Engine\Renderer\ShaderWrapper.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\defaultFragment.glsl" />
-    <None Include="Shaders\defaultVertex.glsl" />
+    <None Include="Source\Engine\Renderer\Shaders\defaultFragment.glsl" />
+    <None Include="Source\Engine\Renderer\Shaders\defaultVertex.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

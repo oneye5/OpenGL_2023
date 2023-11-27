@@ -59,8 +59,8 @@ public:
 	void LoadShaders()
 	{
 		//create shaders
-		std::string path = FileLoader::GetWorkingDir() + "/Shaders/";
-
+		std::string path = FileLoader::GetWorkingDir() + "/Source/Engine/Renderer/Shaders/";
+        std::cout << "Path of shaders " + path << std::endl;
 		std::string fragmentShader = FileLoader::GetFileContents(path + "defaultFragment.glsl");
 		std::string vertexShader = FileLoader::GetFileContents(path + "defaultVertex.glsl");
 
