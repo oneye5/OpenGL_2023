@@ -128,6 +128,9 @@ void Renderer::InitBuffers(std::vector<float> verticies,std::vector<unsigned int
     glGenBuffers(1, &indexBuffer);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicies.size() * sizeof(unsigned int), indicies.data(), GL_STATIC_DRAW);
+
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
 }
 void Renderer::Destroy()
 {
@@ -146,7 +149,7 @@ int Renderer::Render() //returns -1 to quit window
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
 
 
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT,nullptr);
 
     /* Swap front and back buffers */

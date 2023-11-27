@@ -1,80 +1,103 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{532b2b3f-bf39-42c6-84eb-aaaee69928a4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Dependencies">
-      <UniqueIdentifier>{c616a0a4-e50a-478c-add9-56799d3b0b3c}</UniqueIdentifier>
+    <Filter Include="Engine\Renderer">
+      <UniqueIdentifier>{5c418248-6cfe-4611-b643-0791e91b8047}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\GameObjects">
+    <Filter Include="Engine\GameObject">
+      <UniqueIdentifier>{a70c97a4-d167-4cd7-abdd-a1cbe2111c77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\GameObject\Components">
+      <UniqueIdentifier>{70f3ab7a-1a4b-4733-8cc1-a3824d604ca1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\GameObjectManagement">
+      <UniqueIdentifier>{a50529ba-0e49-4123-a641-00e2d101c128}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Misc_Systems">
+      <UniqueIdentifier>{8c443368-b08e-42eb-966e-cd416c4bab79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Engine_Core">
+      <UniqueIdentifier>{38fcf0e9-281c-45ba-8e13-35abc481079f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Client_Assets">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Client_Assets\GameObjects">
       <UniqueIdentifier>{c35c1c32-fa06-47c9-aaf3-0b644c6fd24c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Shaders">
+    <Filter Include="Engine\Renderer\Shaders">
       <UniqueIdentifier>{fbb17fc3-1d1d-40e7-a603-622d667ef66c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Application.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="testObject.h">
-      <Filter>Source Files\GameObjects</Filter>
+      <Filter>Client_Assets\GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="Systems.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Engine\Engine_Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Application.cpp">
+      <Filter>Engine\Engine_Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>Engine\Renderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="FileLoader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="IndexBuffer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ShaderWrapper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Systems.h">
+      <Filter>Engine\Engine_Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>Engine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Engine\GameObject\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Engine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>Engine\GameObject\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="FileLoader.h">
+      <Filter>Engine\Misc_Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Engine\GameObject</Filter>
+    </ClInclude>
     <ClInclude Include="GameObjectManager.h">
-      <Filter>Header Files</Filter>
+      <Filter>Engine\GameObjectManagement</Filter>
     </ClInclude>
     <ClInclude Include="InputManager.h">
-      <Filter>Header Files</Filter>
+      <Filter>Engine\Engine_Core</Filter>
     </ClInclude>
-    <ClInclude Include="Systems.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="ShaderWrapper.h">
+      <Filter>Engine\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>Engine\GameObject\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\defaultVertex.glsl">
-      <Filter>Shaders</Filter>
+      <Filter>Engine\Renderer\Shaders</Filter>
     </None>
     <None Include="Shaders\defaultFragment.glsl">
-      <Filter>Shaders</Filter>
+      <Filter>Engine\Renderer\Shaders</Filter>
     </None>
   </ItemGroup>
 </Project>
