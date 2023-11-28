@@ -104,7 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)GL_2023\Source\Engine\Misc_Systems;$(SolutionDir)GL_2023\Source\Engine\GameObjectManagement;$(SolutionDir)GL_2023\Source\Engine\GameObject\Components;$(SolutionDir)GL_2023\Source\Engine\GameObject;$(SolutionDir)GL_2023\Source\Engine\Engine_Core;$(SolutionDir)GL_2023\Source\Client_Assets;$(SolutionDir)GL_2023\Source\Engine\Renderer;$(SolutionDir)dependencies;%(AdditionalIncludeDirectories);$(SolutionDir)dependencies\GLEW\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\ocjla\source\repos\GL_2023\dependencies\Image_Utilities;$(SolutionDir)GL_2023\Source\Engine\Misc_Systems;$(SolutionDir)GL_2023\Source\Engine\GameObjectManagement;$(SolutionDir)GL_2023\Source\Engine\GameObject\Components;$(SolutionDir)GL_2023\Source\Engine\GameObject;$(SolutionDir)GL_2023\Source\Engine\Engine_Core;$(SolutionDir)GL_2023\Source\Client_Assets;$(SolutionDir)GL_2023\Source\Engine\Renderer;$(SolutionDir)dependencies;%(AdditionalIncludeDirectories);$(SolutionDir)dependencies\GLEW\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -121,7 +121,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)GL_2023\Source\Engine\Misc_Systems;$(SolutionDir)GL_2023\Source\Engine\GameObjectManagement;$(SolutionDir)GL_2023\Source\Engine\GameObject\Components;$(SolutionDir)GL_2023\Source\Engine\GameObject;$(SolutionDir)GL_2023\Source\Engine\Engine_Core;$(SolutionDir)GL_2023\Source\Client_Assets;$(SolutionDir)GL_2023\Source\Engine\Renderer;$(SolutionDir)dependencies;%(AdditionalIncludeDirectories);$(SolutionDir)dependencies\GLEW\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\ocjla\source\repos\GL_2023\dependencies\Image_Utilities;$(SolutionDir)GL_2023\Source\Engine\Misc_Systems;$(SolutionDir)GL_2023\Source\Engine\GameObjectManagement;$(SolutionDir)GL_2023\Source\Engine\GameObject\Components;$(SolutionDir)GL_2023\Source\Engine\GameObject;$(SolutionDir)GL_2023\Source\Engine\Engine_Core;$(SolutionDir)GL_2023\Source\Client_Assets;$(SolutionDir)GL_2023\Source\Engine\Renderer;$(SolutionDir)dependencies;%(AdditionalIncludeDirectories);$(SolutionDir)dependencies\GLEW\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -135,7 +135,9 @@
   <ItemGroup>
     <ClCompile Include="Source\Engine\Engine_Core\Application.cpp" />
     <ClCompile Include="Source\Engine\Engine_Core\Systems.cpp" />
+    <ClCompile Include="Source\Engine\Misc_Systems\stb_Image.cpp" />
     <ClCompile Include="Source\Engine\Renderer\Renderer.cpp" />
+    <ClCompile Include="Source\Engine\Renderer\SurfaceImage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Client_Assets\testObject.h" />
@@ -150,6 +152,7 @@
     <ClInclude Include="Source\Engine\Renderer\Camera.h" />
     <ClInclude Include="Source\Engine\Renderer\Renderer.h" />
     <ClInclude Include="Source\Engine\Renderer\ShaderWrapper.h" />
+    <ClInclude Include="Source\Engine\Renderer\SurfaceImage.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Source\Engine\Renderer\Shaders\defaultFragment.glsl" />

@@ -4,9 +4,12 @@
 #include "Component.h"
 #include "GLM/glm-master/glm/glm.hpp"
 #include <GLM/glm-master/glm/gtc/matrix_transform.hpp>
+
 class Mesh : public Component
 {
 public:
+    
+
     virtual void InitComponent() override
     {
 
