@@ -66,6 +66,13 @@ public:
 
 		Shader = createShader(vertexShader, fragmentShader);
 	}
+    void SetSurfaceImage(int imageNumber,int slot)
+    {
+        std::string varName = "Texture_" + std::to_string(imageNumber);
+        int location = getUniformLocation(varName);
+        if (location != 0)
+            glUniform1i(location, slot);
+    }
 	void UpdateMatricies(glm::mat4 projectionMatrix, glm::mat4 modelMatrix, glm::mat4 viewMatrix)
 	{
 

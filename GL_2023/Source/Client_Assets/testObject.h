@@ -23,7 +23,7 @@ public:
 		if (Inputs->GetKey('T'))
 			yRot -= 0.01;
 
-		xRot *= -3.0f; yRot *= -3.0f;
+		xRot *= -10.0f; yRot *= -10.0f;
 
 		renderer->ActiveCamera->rot += glm::vec3(yRot, xRot, 0.0f);
 	}

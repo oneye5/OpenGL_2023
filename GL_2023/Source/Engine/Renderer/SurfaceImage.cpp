@@ -2,6 +2,17 @@
 #include "FileLoader.h"
 SurfaceImage::SurfaceImage(const std::string& path)
 {
+	/*unsigned int RendererID;
+	std::string FilePath;
+	unsigned char* Buffer;
+	int width, height, BitsPerPixel;*/
+	RendererID = 0;
+	FilePath = path;
+	Buffer = nullptr;
+	width = 0;
+	height = 0;
+	BitsPerPixel = 0;
+
 	Buffer = FileLoader::LoadImage(path, width, height, BitsPerPixel);
 	glGenTextures(1, &RendererID);
 	glBindTexture(GL_TEXTURE_2D, RendererID);
@@ -17,15 +28,16 @@ SurfaceImage::SurfaceImage(const std::string& path)
 
 SurfaceImage::~SurfaceImage()
 {
-
+	glDeleteTextures(1, &RendererID);
 }
 
 void SurfaceImage::Bind(unsigned int slot) const
 {
-
+	glActiveTexture(GL_TEXTURE0 + slot);
+	glBindTexture(GL_TEXTURE_2D, RendererID);
 }
 
 void SurfaceImage::Unbind() const
 {
-
+	glBindTexture(GL_TEXTURE_2D, 0);
 }

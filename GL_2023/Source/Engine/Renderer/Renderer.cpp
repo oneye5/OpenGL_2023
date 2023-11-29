@@ -4,6 +4,7 @@
 #include "ShaderWrapper.h"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include "SurfaceImage.h"
 
 GLFWwindow* window;
 unsigned int vertexBuffer;
@@ -103,11 +104,16 @@ int Renderer::Initialize()
         0, 1, 5,  0, 5, 4,    // Bottom face
         2, 3, 7,  2, 7, 6     // Top face
     };
- 
-
+    //    \GL_2023\Source\Client_Assets\GraphicsAssets\Textures\texture.png
     ActiveCamera = &cam;
     InitBuffers(verticies, indicies);
     shader.LoadShaders();
+
+    SurfaceImage texture(FileLoader::GetWorkingDir() + "/Source/Client_Assets/GraphicsAssets/Textures/texture.png");
+    texture.Bind(0);
+    shader.SetSurfaceImage(0, 0);
+
+   
     
     return 0;
 }

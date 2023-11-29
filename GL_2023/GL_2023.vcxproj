@@ -133,11 +133,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Engine\Engine_Core\Application.cpp" />
-    <ClCompile Include="Source\Engine\Engine_Core\Systems.cpp" />
-    <ClCompile Include="Source\Engine\Misc_Systems\stb_Image.cpp" />
-    <ClCompile Include="Source\Engine\Renderer\Renderer.cpp" />
-    <ClCompile Include="Source\Engine\Renderer\SurfaceImage.cpp" />
+    <None Include="Source\Engine\Renderer\Shaders\defaultFragment.glsl" />
+    <None Include="Source\Engine\Renderer\Shaders\defaultVertex.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Client_Assets\testObject.h" />
@@ -155,8 +152,11 @@
     <ClInclude Include="Source\Engine\Renderer\SurfaceImage.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Source\Engine\Renderer\Shaders\defaultFragment.glsl" />
-    <None Include="Source\Engine\Renderer\Shaders\defaultVertex.glsl" />
+    <ClCompile Include="Source\Engine\Engine_Core\Application.cpp" />
+    <ClCompile Include="Source\Engine\Engine_Core\Systems.cpp" />
+    <ClCompile Include="Source\Engine\Misc_Systems\stb_Image.cpp" />
+    <ClCompile Include="Source\Engine\Renderer\Renderer.cpp" />
+    <ClCompile Include="Source\Engine\Renderer\SurfaceImage.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
