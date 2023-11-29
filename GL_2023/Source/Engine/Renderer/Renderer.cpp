@@ -16,6 +16,9 @@ const int screenHeight = 900;
 
 Camera cam(screenWidth,screenHeight);
 ShaderWrapper shader;
+ 
+//SurfaceImage* SurfaceImages;
+SurfaceImage* surfaceImage = nullptr;
 
 void debugMessage(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length,
     const GLchar* message, const void* userParam)
@@ -109,11 +112,10 @@ int Renderer::Initialize()
     InitBuffers(verticies, indicies);
     shader.LoadShaders();
 
-    SurfaceImage texture(FileLoader::GetWorkingDir() + "/Source/Client_Assets/GraphicsAssets/Textures/texture.png");
-    texture.Bind(0);
-    shader.SetSurfaceImage(0, 0);
-
-   
+   surfaceImage = new SurfaceImage(FileLoader::GetWorkingDir() + "/Source/Client_Assets/GraphicsAssets/Textures/texture.png");
+   surfaceImage->Bind(0);
+   shader.SetSurfaceImage(0, 0);
+  
     
     return 0;
 }
@@ -150,10 +152,12 @@ int Renderer::Render() //returns -1 to quit window
    
     ActiveCamera->updateRotation(); ActiveCamera->makeView();
     shader.UpdateMatricies(cam.projectionMatrix,glm::mat4(1.0f), cam.viewMatrix);
+    surfaceImage->Bind(0);
+    shader.SetSurfaceImage(0, 0);
 
     glBindVertexArray(vertexArrayObject);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
-
+   
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT,nullptr);

@@ -4,11 +4,10 @@
 #include <vector>
 #include "Camera.h"
 
-
 class Renderer
 {
 public:
-
+    
     Camera* ActiveCamera;
     Renderer()
     {

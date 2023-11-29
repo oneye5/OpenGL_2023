@@ -2,7 +2,7 @@
 
 in vec4 worldPosition;
 in vec2 UV;
-out vec4 color;
+out vec4 FragColor;
 
 
 //uniform vec4 u_Color;
@@ -19,10 +19,8 @@ void main()
     
    
   //  gl_FragColor = vec4(sin(worldPosition.x),sin(worldPosition.y),sin(worldPosition.z),1.0);
-  vec4 colorFromTexture = texture(Texture_0,UV);
-  color = colorFromTexture;
-  if(colorFromTexture == vec4(0,0,0,1) || colorFromTexture == vec4(0,0,0,0))
-    gl_FragColor = vec4(0.5,0.5,0.5,1);
-   else
-   gl_FragColor = colorFromTexture;
+   vec4 textureColor = texture(Texture_0, UV);
+    
+    // Output the sampled color to FragColor
+    FragColor = textureColor;
  }

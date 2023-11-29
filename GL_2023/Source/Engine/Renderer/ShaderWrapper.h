@@ -12,7 +12,7 @@ private:
 	{
         int location = glGetUniformLocation(Shader,  name.c_str());
 		//if (location == -1)
-			//std::cout << "uniform not found ("+(std::string)name+")"+"\n";
+		//	std::cout << "uniform not found ("+(std::string)name+")"+"\n";
 	
 		return location;
 	}

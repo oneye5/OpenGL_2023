@@ -3,7 +3,7 @@
 class SurfaceImage
 {
 public:
-	unsigned int RendererID;
+	unsigned int textureID;
 	std::string FilePath;
 	unsigned char* Buffer;
 	int width, height, BitsPerPixel;
