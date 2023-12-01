@@ -26,6 +26,8 @@ public:
 		xRot *= -10.0f; yRot *= -10.0f;
 
 		renderer->ActiveCamera->rot += glm::vec3(yRot, xRot, 0.0f);
+
+		
 	}
 	virtual void Awake() override
 	{

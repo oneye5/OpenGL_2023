@@ -108,15 +108,24 @@ int Renderer::Initialize()
         2, 3, 7,  2, 7, 6     // Top face
     };
     //    \GL_2023\Source\Client_Assets\GraphicsAssets\Textures\texture.png
-    ActiveCamera = &cam;
-    InitBuffers(verticies, indicies);
+    ActiveCamera = &cam; 
+    
+    //load mesh
+    std::vector<float> mData;
+    std::vector<unsigned int> mIndicies;
+   FileLoader::LoadMesh(FileLoader::GetWorkingDir() + "/Source/Client_Assets/GraphicsAssets/Meshes/untitled.obj",mData,mIndicies);
+
+
+
+    InitBuffers(mData, mIndicies);
     shader.LoadShaders();
 
    surfaceImage = new SurfaceImage(FileLoader::GetWorkingDir() + "/Source/Client_Assets/GraphicsAssets/Textures/texture.png");
    surfaceImage->Bind(0);
    shader.SetSurfaceImage(0, 0);
   
-    
+ 
+
     return 0;
 }
 void Renderer::InitBuffers(std::vector<float> verticies,std::vector<unsigned int> indicies)
@@ -129,8 +138,13 @@ void Renderer::InitBuffers(std::vector<float> verticies,std::vector<unsigned int
     glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     glBufferData(GL_ARRAY_BUFFER, verticies.size() * sizeof(float), verticies.data(), GL_STATIC_DRAW);
 
+    // Define the layout for the vertex buffer (positions, normals, UVs)
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, 0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 8, nullptr); // Position
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (void*)(sizeof(float) * 3)); // Normal
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (void*)(sizeof(float) * 6)); // UVs
 
     // Index buffer
     glGenBuffers(1, &indexBuffer);
