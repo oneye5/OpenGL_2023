@@ -10,6 +10,12 @@ using std::string;
 static class FileLoader
 {
 public:
+	/// <summary>
+	/// Loads a specified .obj file using a full path and reformats and indexes the data for use by OpenGL. use GetWorkingDir() to make it relative to the project.
+	/// </summary>
+	/// <param name="data">Used as an output. Adds data for the verticies, including positon, normal and uv data.</param>
+	/// <param name="indicies">Used as an output. Each index refers to a set of vertex data.</param>
+	/// <returns>Returns false if the method fails.</returns>
 	static bool LoadMesh(std::string path,std::vector<float>& data, std::vector<unsigned int>& indicies)
 	{
 		std::vector<glm::vec3> verticies, normals; std::vector<glm::vec2> uv; std::vector<unsigned int> faceIndicies;

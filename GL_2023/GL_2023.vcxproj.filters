@@ -102,5 +102,8 @@
     <ClCompile Include="Source\Engine\Renderer\SurfaceImage.cpp">
       <Filter>Engine\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Engine\GameObject\Components</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
