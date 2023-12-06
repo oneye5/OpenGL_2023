@@ -13,7 +13,7 @@ class Mesh : public Component
     std::vector<unsigned int> indicies;
 public:
     std::string MeshLocation;
-
+    bool Static;
     bool PushToRenderer(bool keepCopyOnStack);
 
     ///<summary><para>Loads the file and stores the data onto the stack, returns false if fails.</para><para> For example file == "mesh.obj"</para></summary>

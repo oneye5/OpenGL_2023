@@ -7,6 +7,7 @@
 #include <stb_image.h>
 
 using std::string;
+using std::vector;
 static class FileLoader
 {
 public:
@@ -16,10 +17,12 @@ public:
 	/// <param name="data">Used as an output. Adds data for the verticies, including positon, normal and uv data.</param>
 	/// <param name="indicies">Used as an output. Each index refers to a set of vertex data.</param>
 	/// <returns>Returns false if the method fails.</returns>
-	static bool LoadMesh(std::string path,std::vector<float>& data, std::vector<unsigned int>& indicies)
+	static bool LoadMesh(std::string path,std::vector<float>& dataOut, vector<vector<unsigned int>>& indiciesOut)
 	{
-		std::vector<glm::vec3> verticies, normals; std::vector<glm::vec2> uv; std::vector<unsigned int> faceIndicies;
 
+
+		std::vector<glm::vec3> verticies, normals; std::vector<glm::vec2> uv; std::vector<std::vector<unsigned int>> faceIndiciesGroups;
+		std::vector<unsigned int> faceIndicies;
 
 		std::ifstream fileStream(path);
 		if (!fileStream.is_open()) {
@@ -104,26 +107,72 @@ public:
 					faceIndicies.push_back(std::stoi(x));
 				}
 			}
+			else if (prefix == "usemtl")
+			{
+				if (faceIndiciesGroups.size() == 0) //first material, no need to push an empty vector of indicies
+					continue;
+
+				faceIndiciesGroups.push_back(faceIndicies); faceIndicies.clear();
+			}
 		}
+		faceIndicies.clear();
+
+	
+
+
 
 		//file is now done loading, put it into a format that opengl can use
-		std::vector<float> rawData; 
-		for (int i = 0; i < faceIndicies.size(); i += 3)//+=3 because indicies are grouped in lots of 3
+		
+		vector<vector<vector<float>>> objectDataGroups; //contains sets of data for every object
+		for (auto faceIndicies : faceIndiciesGroups)
 		{
-			rawData.push_back(verticies[faceIndicies[i]-1].x);
-			rawData.push_back(verticies[faceIndicies[i]-1].y);
-			rawData.push_back(verticies[faceIndicies[i]-1].z);
+			vector<vector<float>> dataGroup;
+			for (int i = 0; i < faceIndicies.size(); i += 3)//+=3 because indicies are grouped in lots of 3
+			{
+				vector<float> floats;
+				floats.push_back(verticies[faceIndicies[i] - 1].x);
+				floats.push_back(verticies[faceIndicies[i] - 1].y);
+				floats.push_back(verticies[faceIndicies[i] - 1].z);
 
-			rawData.push_back(normals[faceIndicies[i + 2]-1].x);
-			rawData.push_back(normals[faceIndicies[i + 2]-1].y);
-			rawData.push_back(normals[faceIndicies[i + 2]-1].z);
+				floats.push_back(normals[faceIndicies[i + 2] - 1].x);
+				floats.push_back(normals[faceIndicies[i + 2] - 1].y);
+				floats.push_back(normals[faceIndicies[i + 2] - 1].z);
 
-			rawData.push_back(uv[faceIndicies[i + 1]-1].x);
-			rawData.push_back(uv[faceIndicies[i + 1]-1].y);
+				floats.push_back(uv[faceIndicies[i + 1] - 1].x);
+				floats.push_back(uv[faceIndicies[i + 1] - 1].y);
+
+				dataGroup.push_back(floats);
+			}
+			objectDataGroups.push_back(dataGroup);
 		}
 
 
-		IndexRawMeshData(rawData, data, indicies);
+		vector<vector<float>> allDifferentDataGroups; //contains every different set of 8 floats, no duplicates, used for indexing
+		for (auto group : objectDataGroups)
+		{
+			vector<unsigned int> newIndexGroup;
+			for (auto vertexData : group)
+			{
+				auto iterator = std::find(allDifferentDataGroups.begin(), allDifferentDataGroups.end(), vertexData);
+				if (iterator != allDifferentDataGroups.end())//found
+				{
+					unsigned int index = std::distance(allDifferentDataGroups.begin(), iterator);
+					newIndexGroup.push_back(index);
+				}
+				else
+				{
+					allDifferentDataGroups.push_back(vertexData);
+					newIndexGroup.push_back(vertexData.size() - 1);
+				}
+			}
+			indiciesOut.push_back(newIndexGroup);
+		}
+	
+		//now put the groups of 8 floats into a single string of floats
+		for (auto group : allDifferentDataGroups)
+			for (auto vertexFloat : group)
+				dataOut.push_back(vertexFloat);
+		
 		return true;
 	}
 

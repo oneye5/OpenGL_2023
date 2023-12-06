@@ -17,8 +17,8 @@ bool Mesh::PushToRenderer(bool keepCopyOnStack)
 }
 bool Mesh::LoadFile(std::string file)
 {
-
-	FileLoader::LoadMesh (FileLoader::GetWorkingDir() +"/" + file);
-
-	return false;
+	MeshLocation = file;
+	bool successful = FileLoader::LoadMesh(FileLoader::GetWorkingDir() +"/" + file,data,indicies);
+	
+	return successful;
 }
