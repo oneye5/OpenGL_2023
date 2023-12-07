@@ -3,11 +3,12 @@
 #include <iostream>
 #include <vector>
 #include "Camera.h"
+#include "BufferManagement.h"
 
 class Renderer
 {
 public:
-    
+    BufferManagement BufferManager;
     Camera* ActiveCamera;
     Renderer()
     {

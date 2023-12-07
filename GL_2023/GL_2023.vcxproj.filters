@@ -85,6 +85,9 @@
     <ClInclude Include="Source\Engine\Renderer\SurfaceImage.h">
       <Filter>Engine\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Engine\Renderer\BufferManagement.h">
+      <Filter>Engine\Renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Engine\Engine_Core\Application.cpp">

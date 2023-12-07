@@ -19,7 +19,7 @@ public:
 	/// <returns>Returns false if the method fails.</returns>
 	static bool LoadMesh(std::string path,std::vector<float>& dataOut, vector<vector<unsigned int>>& indiciesOut)
 	{
-
+		dataOut.clear(); indiciesOut.clear();
 
 		std::vector<glm::vec3> verticies, normals; std::vector<glm::vec2> uv; std::vector<std::vector<unsigned int>> faceIndiciesGroups;
 		std::vector<unsigned int> faceIndicies;
@@ -176,7 +176,7 @@ public:
 		return true;
 	}
 
-	static void IndexRawMeshData(const std::vector<float>& inData, std::vector<float>& vertexBufferData, std::vector<unsigned int>& indexBufferData)
+	static void IndexRawMeshData(const std::vector<float>& inData, std::vector<float>& vertexBufferData, std::vector<unsigned int>& indexBufferData) //UNSUSED CURRENTLY
 	{
 		// Assuming each vertex has 8 floats: position (x, y, z), normal (nx, ny, nz), UV (u, v)
 		const int floatsPerVertex = 8;

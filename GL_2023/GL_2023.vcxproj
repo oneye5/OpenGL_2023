@@ -146,6 +146,7 @@
     <ClInclude Include="Source\Engine\GameObject\Components\Transform.h" />
     <ClInclude Include="Source\Engine\GameObject\GameObject.h" />
     <ClInclude Include="Source\Engine\Misc_Systems\FileLoader.h" />
+    <ClInclude Include="Source\Engine\Renderer\BufferManagement.h" />
     <ClInclude Include="Source\Engine\Renderer\Camera.h" />
     <ClInclude Include="Source\Engine\Renderer\Renderer.h" />
     <ClInclude Include="Source\Engine\Renderer\ShaderWrapper.h" />

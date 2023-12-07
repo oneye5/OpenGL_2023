@@ -82,31 +82,6 @@ int Renderer::Initialize()
     glDebugMessageCallback(debugMessage, NULL);
     glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, NULL, GL_TRUE);
 
-
-
-    //create buffer
-    std::vector<float> verticies = {
-        // Front face
-        -0.5f, -0.5f,  0.5f,
-         0.5f, -0.5f,  0.5f,
-         0.5f,  0.5f,  0.5f,
-        -0.5f,  0.5f,  0.5f,
-
-        // Back face
-        -0.5f, -0.5f, -0.5f,
-         0.5f, -0.5f, -0.5f,
-         0.5f,  0.5f, -0.5f,
-        -0.5f,  0.5f, -0.5f
-    };
-
-    std::vector<unsigned int> indicies = {
-        0, 1, 2,  0, 2, 3,    // Front face
-        4, 5, 6,  4, 6, 7,    // Back face
-        0, 3, 7,  0, 7, 4,    // Left face
-        1, 2, 6,  1, 6, 5,    // Right face
-        0, 1, 5,  0, 5, 4,    // Bottom face
-        2, 3, 7,  2, 7, 6     // Top face
-    };
     //    \GL_2023\Source\Client_Assets\GraphicsAssets\Textures\texture.png
     ActiveCamera = &cam; 
     
