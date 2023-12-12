@@ -1,13 +1,15 @@
 #pragma once
-
+class GameObject;
 class Component
 {
+private:
+	
 public:
 	//for use by files inheriting component
-	class GameObject;
 	bool Active = true;
-	GameObject* parentObject = nullptr;
+	void* parentObject = nullptr; //GameObject type
 	virtual void InitComponent() = 0;
 	virtual void UpdateComponent(float ms) = 0;
 	virtual void OnDestroy() = 0;
+	Component(GameObject* gameObject);
 };

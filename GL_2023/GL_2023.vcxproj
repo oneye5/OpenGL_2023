@@ -153,9 +153,11 @@
     <ClInclude Include="Source\Engine\Renderer\SurfaceImage.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BufferManagement.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Source\Engine\Engine_Core\Application.cpp" />
     <ClCompile Include="Source\Engine\Engine_Core\Systems.cpp" />
+    <ClCompile Include="Source\Engine\GameObject\Components\Component.cpp" />
     <ClCompile Include="Source\Engine\Misc_Systems\stb_Image.cpp" />
     <ClCompile Include="Source\Engine\Renderer\Renderer.cpp" />
     <ClCompile Include="Source\Engine\Renderer\SurfaceImage.cpp" />

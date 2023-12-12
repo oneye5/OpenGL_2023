@@ -10,10 +10,12 @@ public:
 	//for use by files inheriting GameObject
 	bool Active = true;
 	
-	void AddComponent(Component* c)
+	Component* AddComponent(Component* c)
 	{
 		Components.push_back(c);
+		c->parentObject = this;
 		c->InitComponent();
+		return c;
 	}
 	void DestroyComponent(Component* c)
 	{

@@ -46,6 +46,15 @@ class Transform : public Component
         }
     }
 
+    virtual void OnDestroy() override
+    {
+
+    }
+
+
+    Transform(GameObject* x) : Component(x) {};
+
+
 private: 
     glm::vec3 oldPos; //used for detecting if current translation matrix is dirty
     glm::vec3 oldRot;

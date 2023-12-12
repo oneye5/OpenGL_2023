@@ -84,15 +84,6 @@ int Renderer::Initialize()
 
     //    \GL_2023\Source\Client_Assets\GraphicsAssets\Textures\texture.png
     ActiveCamera = &cam; 
-    
-    //load mesh
-    std::vector<float> mData;
-    std::vector<unsigned int> mIndicies;
-   FileLoader::LoadMesh(FileLoader::GetWorkingDir() + "/Source/Client_Assets/GraphicsAssets/Meshes/untitled.obj",mData,mIndicies);
-
-
-
-    InitBuffers(mData, mIndicies);
     shader.LoadShaders();
 
    surfaceImage = new SurfaceImage(FileLoader::GetWorkingDir() + "/Source/Client_Assets/GraphicsAssets/Textures/texture.png");
@@ -122,6 +113,7 @@ void Renderer::InitBuffers(std::vector<float> verticies,std::vector<unsigned int
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 8, (void*)(sizeof(float) * 6)); // UVs
 
     // Index buffer
+    /**/
     glGenBuffers(1, &indexBuffer);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicies.size() * sizeof(unsigned int), indicies.data(), GL_STATIC_DRAW);
@@ -136,7 +128,6 @@ void Renderer::Destroy()
 }
 int Renderer::Render() //returns -1 to quit window
 {
-    //opengl stuff
     glUseProgram(shader.Shader);
    
     ActiveCamera->updateRotation(); ActiveCamera->makeView();
@@ -144,11 +135,15 @@ int Renderer::Render() //returns -1 to quit window
     surfaceImage->Bind(0);
     shader.SetSurfaceImage(0, 0);
 
-    glBindVertexArray(vertexArrayObject);
+    glBindVertexArray(vertexArrayObject); 
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    //draw calls
+
+
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
    
 
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+   
     glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT,nullptr);
 
     /* Swap front and back buffers */

@@ -27,6 +27,7 @@ public:
 			if (obj->Active)
 			{
 				obj->Update(-1.0f);//not yet properly implimented
+				obj->UpdateComponents(-1.0f); 
 			}
 		}
 	}

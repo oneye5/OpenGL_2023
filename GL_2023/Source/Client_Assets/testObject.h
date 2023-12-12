@@ -2,8 +2,14 @@
 #include <iostream>
 #include "InputManager.h"
 #include "Renderer.h"
+
+#include "Transform.h"
+#include "Mesh.h";
+#include "FileLoader.h"
 class testObject : public GameObject
 {
+	Mesh* mesh = nullptr;
+	Transform* transform = nullptr;
 public:
 	virtual void Update(float ms) override
 	{
@@ -36,5 +42,7 @@ public:
 	virtual void Start() override
 	{
 		std::cout << "start"<< std::endl;
+
+		transform = new Transform();
 	}
 };
