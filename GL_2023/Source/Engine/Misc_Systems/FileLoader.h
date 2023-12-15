@@ -22,101 +22,102 @@ public:
 		dataOut.clear(); indiciesOut.clear();
 
 		std::vector<glm::vec3> verticies, normals; std::vector<glm::vec2> uv; std::vector<std::vector<unsigned int>> faceIndiciesGroups;
-		std::vector<unsigned int> faceIndicies;
+	
 
-		std::ifstream fileStream(path);
-		if (!fileStream.is_open()) {
-			// Failed to open file
-			return false;
-		}
+			std::ifstream fileStream(path);
+			if (!fileStream.is_open()) {
+				std::cout << "failed to open file in loadmesh";
+				return false;
+			}
 
-		std::string line;
-		while (std::getline(fileStream, line))
-		{
-			std::istringstream lineStream(line);
-			std::string prefix;
-			lineStream >> prefix;
-			
-			if (prefix == "v") //vertex
+			std::string line;std::vector<unsigned int> faceIndicies;
+			while (std::getline(fileStream, line))
 			{
-				glm::vec3 vertex;
-				lineStream >> vertex.x >> vertex.y >> vertex.z;
-				verticies.push_back(vertex);
-			}
-			else if (prefix == "vn") //norm
-			{
-				glm::vec3 norm;
-				lineStream >> norm.x >> norm.y >> norm.z;
-				normals.push_back(norm);
-			}
-			else if (prefix == "vt") //uv's
-			{
-				glm::vec2 texCoord;
-				lineStream >> texCoord.x >> texCoord.y;
-				uv.push_back(texCoord);
-			}
-			else if (prefix == "f") //indicies
-			{
-				std::string s1, s2, s3;
-				lineStream >> s1>>s2>>s3;
-				std::vector<std::string> args;
-				std::string arg;
-				for (auto x : s1)
+				
+				std::istringstream lineStream(line);
+				std::string prefix;
+				lineStream >> prefix;
+
+				if (prefix == "v") //vertex
 				{
-					if (x == '/')
+					glm::vec3 vertex;
+					lineStream >> vertex.x >> vertex.y >> vertex.z;
+					verticies.push_back(vertex);
+				}
+				else if (prefix == "vn") //norm
+				{
+					glm::vec3 norm;
+					lineStream >> norm.x >> norm.y >> norm.z;
+					normals.push_back(norm);
+				}
+				else if (prefix == "vt") //uv's
+				{
+					glm::vec2 texCoord;
+					lineStream >> texCoord.x >> texCoord.y;
+					uv.push_back(texCoord);
+				}
+				else if (prefix == "f") //indicies
+				{
+					std::string s1, s2, s3;
+					lineStream >> s1 >> s2 >> s3;
+					std::vector<std::string> args;
+					std::string arg;
+					for (auto x : s1)
 					{
-						args.push_back(arg);
-						arg = "";
-						continue;
+						if (x == '/')
+						{
+							args.push_back(arg);
+							arg = "";
+							continue;
+						}
+						arg += x;
 					}
-					arg += x;
-				}
-				args.push_back(arg);
-				arg = "";
-				for (auto x : s2)
-				{
-					if (x == '/')
+					args.push_back(arg);
+					arg = "";
+					for (auto x : s2)
 					{
-						args.push_back(arg);
-						arg = "";
-						continue;
+						if (x == '/')
+						{
+							args.push_back(arg);
+							arg = "";
+							continue;
+						}
+						arg += x;
 					}
-					arg += x;
-				}
-				args.push_back(arg);
-				arg = "";
-				for (auto x : s3)
-				{
-					if (x == '/')
+					args.push_back(arg);
+					arg = "";
+					for (auto x : s3)
 					{
-						args.push_back(arg);
-						arg = "";
-						continue;
+						if (x == '/')
+						{
+							args.push_back(arg);
+							arg = "";
+							continue;
+						}
+						arg += x;
 					}
-					arg += x;
+					args.push_back(arg);
+					arg = "";
+
+
+
+
+					//cast to unsigned int
+					for (auto x : args)
+					{
+						faceIndicies.push_back(std::stoi(x));
+					}
 				}
-				args.push_back(arg);
-				arg = "";
-
-
-
-
-				//cast to unsigned int
-				for (auto x : args)
+				else if (prefix == "usemtl")
 				{
-					faceIndicies.push_back(std::stoi(x));
+					if (faceIndicies.size() != 0)
+					{
+						faceIndiciesGroups.push_back(faceIndicies);
+						faceIndicies.clear();
+					}
 				}
 			}
-			else if (prefix == "usemtl")
-			{
-				if (faceIndiciesGroups.size() == 0) //first material, no need to push an empty vector of indicies
-					continue;
-
-				faceIndiciesGroups.push_back(faceIndicies); faceIndicies.clear();
-			}
-		}
-		faceIndicies.clear();
-
+			faceIndiciesGroups.push_back(faceIndicies);
 	
 
 
@@ -124,22 +125,22 @@ public:
 		//file is now done loading, put it into a format that opengl can use
 		
 		vector<vector<vector<float>>> objectDataGroups; //contains sets of data for every object
-		for (auto faceIndicies : faceIndiciesGroups)
+		for (auto faceIndicies2 : faceIndiciesGroups)
 		{
 			vector<vector<float>> dataGroup;
-			for (int i = 0; i < faceIndicies.size(); i += 3)//+=3 because indicies are grouped in lots of 3
+			for (int i = 0; i < faceIndicies2.size(); i += 3)//+=3 because indicies are grouped in lots of 3
 			{
 				vector<float> floats;
-				floats.push_back(verticies[faceIndicies[i] - 1].x);
-				floats.push_back(verticies[faceIndicies[i] - 1].y);
-				floats.push_back(verticies[faceIndicies[i] - 1].z);
+				floats.push_back(verticies[faceIndicies2[i] - 1].x);
+				floats.push_back(verticies[faceIndicies2[i] - 1].y);
+				floats.push_back(verticies[faceIndicies2[i] - 1].z);
 
-				floats.push_back(normals[faceIndicies[i + 2] - 1].x);
-				floats.push_back(normals[faceIndicies[i + 2] - 1].y);
-				floats.push_back(normals[faceIndicies[i + 2] - 1].z);
+				floats.push_back(normals[faceIndicies2[i + 2] - 1].x);
+				floats.push_back(normals[faceIndicies2[i + 2] - 1].y);
+				floats.push_back(normals[faceIndicies2[i + 2] - 1].z);
 
-				floats.push_back(uv[faceIndicies[i + 1] - 1].x);
-				floats.push_back(uv[faceIndicies[i + 1] - 1].y);
+				floats.push_back(uv[faceIndicies2[i + 1] - 1].x);
+				floats.push_back(uv[faceIndicies2[i + 1] - 1].y);
 
 				dataGroup.push_back(floats);
 			}

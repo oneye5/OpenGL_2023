@@ -8,6 +8,7 @@
 #include <vector>
 #include "Renderer.h"
 #include "Transform.h"
+#include "FileLoader.h"
 
 class Mesh : public Component
 {
@@ -19,16 +20,24 @@ public:
     std::vector<unsigned int> TextureSlots;
     std::string MeshLocation;
     bool Static;
+
     bool PushToBuffer();
-    Mesh(GameObject* gameObject,std::string meshPath) : Component(gameObject) {};
+
+    /// <summary>
+    /// loads mesh data and stores it into the mesh component, the file path is relative to the mesh file, so for example file == "mesh.obj"
+    /// </summary>
+    Mesh(GameObject* gameObject,Transform* transform,std::string meshPath,vector<unsigned int> textureSlots, bool isStaticObject) : Component(gameObject) 
+    {
+        LoadFile(meshPath);
+        Static = isStaticObject;
+        TextureSlots = textureSlots;
+        assosiatedTransform = transform;
+    };
     
     ///<summary><para>Loads the file and stores the data onto the stack, returns false if fails.</para><para> For example file == "mesh.obj"</para></summary>
     bool LoadFile(std::string file); 
 
-    virtual void InitComponent() override
-    {
-
-    }
+    
 
     virtual void UpdateComponent(float ms) override
     {

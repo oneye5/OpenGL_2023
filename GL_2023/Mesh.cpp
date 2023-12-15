@@ -24,8 +24,9 @@ bool Mesh::PushToBuffer()
 }
 bool Mesh::LoadFile(std::string file)
 {
-	MeshLocation = file;
-	bool successful = FileLoader::LoadMesh(FileLoader::GetWorkingDir() +"/" + file,data,indicies);
-	
+	MeshLocation = FileLoader::GetWorkingDir() + "/Source/Client_Assets/GraphicsAssets/Meshes/" + file;
+	bool successful = FileLoader::LoadMesh(MeshLocation,data,indicies);
+	if (!successful)
+		std::cout << "failed loading file at, '" + MeshLocation + "'";
 	return successful;
 }

@@ -10,12 +10,17 @@ public:
 	//for use by files inheriting GameObject
 	bool Active = true;
 	
-	Component* AddComponent(Component* c)
+	void AddComponent(Component* c)
 	{
+		
+		if (c == nullptr)
+		{
+			std::cout << "Error adding compent, argument was nullptr in GameObject.h";
+		}
+		
 		Components.push_back(c);
 		c->parentObject = this;
-		c->InitComponent();
-		return c;
+	
 	}
 	void DestroyComponent(Component* c)
 	{

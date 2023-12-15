@@ -43,6 +43,9 @@ public:
 	{
 		std::cout << "start"<< std::endl;
 
-		transform = new Transform();
+		transform = new Transform(this);
+		std::vector<unsigned int> textureSlots; textureSlots.push_back(0);
+		mesh = new Mesh(this, transform, "untitled.obj", textureSlots, true);
+		mesh->PushToBuffer();
 	}
 };

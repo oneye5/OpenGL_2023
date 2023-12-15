@@ -26,15 +26,6 @@ class Transform : public Component
 
         return transformationMatrix;
 	}
-
-    virtual void InitComponent() override
-    {
-        pos = glm::vec3(0);
-        rot = glm::vec3(0);
-        scale = glm::vec3(1);
-        GetTranslationMatrix();
-    }
-
     virtual void UpdateComponent(float ms) override
     {
         if (pos != oldPos || rot != oldRot || scale != oldScale) //if translation matrix is dirty update it
@@ -52,7 +43,13 @@ class Transform : public Component
     }
 
 
-    Transform(GameObject* x) : Component(x) {};
+    Transform(GameObject* x) : Component(x) 
+    {
+        pos = glm::vec3(0);
+        rot = glm::vec3(0);
+        scale = glm::vec3(1);
+        GetTranslationMatrix();
+    };
 
 
 private: 
