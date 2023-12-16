@@ -5,6 +5,9 @@
 #include <fstream>
 #include <direct.h>
 #include <stb_image.h>
+#include <array>
+#include "unordered_map"
+#include <set>
 
 using std::string;
 using std::vector;
@@ -19,6 +22,21 @@ public:
 	/// <returns>Returns false if the method fails.</returns>
 	static bool LoadMesh(std::string path,std::vector<float>& dataOut, vector<vector<unsigned int>>& indiciesOut)
 	{
+		struct VertexData
+		{
+			float x, y, z, nx, ny, nz, u, v;
+
+			std::array<float, 8> getComponents() const
+			{
+				return std::array<float, 8>{x, y, z, nx, ny, nz, u, v};
+			}
+
+			float getProduct() const
+			{
+				return x * y * z * nx * ny * nz * u * v;
+			}
+		};
+
 		dataOut.clear(); indiciesOut.clear();
 
 		std::vector<glm::vec3> verticies, normals; std::vector<glm::vec2> uv; std::vector<std::vector<unsigned int>> faceIndiciesGroups;
@@ -124,55 +142,67 @@ public:
 
 		//file is now done loading, put it into a format that opengl can use
 		
-		vector<vector<vector<float>>> objectDataGroups; //contains sets of data for every object
+
+
+		//get rid of index buffer to recreate an opengl compatible one later
+		vector<vector<VertexData>> objectDataGroups; 
 		for (auto faceIndicies2 : faceIndiciesGroups)
 		{
-			vector<vector<float>> dataGroup;
+			vector<VertexData> dataGroup;
 			for (int i = 0; i < faceIndicies2.size(); i += 3)//+=3 because indicies are grouped in lots of 3
 			{
-				vector<float> floats;
-				floats.push_back(verticies[faceIndicies2[i] - 1].x);
-				floats.push_back(verticies[faceIndicies2[i] - 1].y);
-				floats.push_back(verticies[faceIndicies2[i] - 1].z);
+				VertexData vData;
+				vData.x = (verticies[faceIndicies2[i] - 1].x);
+				vData.y = (verticies[faceIndicies2[i] - 1].y);
+				vData.z = (verticies[faceIndicies2[i] - 1].z);
 
-				floats.push_back(normals[faceIndicies2[i + 2] - 1].x);
-				floats.push_back(normals[faceIndicies2[i + 2] - 1].y);
-				floats.push_back(normals[faceIndicies2[i + 2] - 1].z);
+				vData.nx = (normals[faceIndicies2[i + 2] - 1].x);
+				vData.ny = (normals[faceIndicies2[i + 2] - 1].y);
+				vData.nz = (normals[faceIndicies2[i + 2] - 1].z);
 
-				floats.push_back(uv[faceIndicies2[i + 1] - 1].x);
-				floats.push_back(uv[faceIndicies2[i + 1] - 1].y);
+				vData.u = (uv[faceIndicies2[i + 1] - 1].x);
+				vData.v = (uv[faceIndicies2[i + 1] - 1].y);
 
-				dataGroup.push_back(floats);
+				dataGroup.push_back(vData);
 			}
 			objectDataGroups.push_back(dataGroup);
 		}
 
 
-		vector<vector<float>> allDifferentDataGroups; //contains every different set of 8 floats, no duplicates, used for indexing
-		for (auto group : objectDataGroups)
-		{
-			vector<unsigned int> newIndexGroup;
-			for (auto vertexData : group)
+		//now put in one vertex buffer and generate new index buffers per object group / texture
+		std::unordered_map<float, unsigned int> elements;
+		vector<VertexData> vertexData;
+		for (vector<VertexData> objectData : objectDataGroups)
+		{ 
+			vector<unsigned int> groupIndecies;
+			for (VertexData vertex : objectData)
 			{
-				auto iterator = std::find(allDifferentDataGroups.begin(), allDifferentDataGroups.end(), vertexData);
-				if (iterator != allDifferentDataGroups.end())//found
+				unsigned int index ;
+				auto iterator = elements.find(vertex.getProduct());
+				if (iterator != elements.end()) //element found
 				{
-					unsigned int index = std::distance(allDifferentDataGroups.begin(), iterator);
-					newIndexGroup.push_back(index);
+					index = iterator->second;
 				}
 				else
 				{
-					allDifferentDataGroups.push_back(vertexData);
-					newIndexGroup.push_back(vertexData.size() - 1);
+					vertexData.push_back(vertex);
+					index = vertexData.size() - 1;
+					elements.insert(std::make_pair(vertex.getProduct(), index));
 				}
+
+				groupIndecies.push_back(index);
 			}
-			indiciesOut.push_back(newIndexGroup);
+			
+			indiciesOut.push_back(groupIndecies);
 		}
-	
-		//now put the groups of 8 floats into a single string of floats
-		for (auto group : allDifferentDataGroups)
-			for (auto vertexFloat : group)
-				dataOut.push_back(vertexFloat);
+		for (auto data : vertexData)
+		{
+			for (auto x : data.getComponents())
+			{
+				dataOut.push_back(x);
+			}
+		}
+
 		
 		return true;
 	}
