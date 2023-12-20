@@ -37,7 +37,7 @@ public:
             glDeleteShader(id);
             return 0;
         }
-        std::cout << "\nshader compiled succesfully id:" << id << " src:\n" << src << " END OF SHADER SRC \n";
+        std::cout << "\nshader compiled succesfully id:" << id << std::endl;
         return id;
     }
     static int createShader(const std::string& vertexShader, const std::string& pixelShader)

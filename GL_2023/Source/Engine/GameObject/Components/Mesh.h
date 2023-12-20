@@ -31,6 +31,12 @@ public:
         LoadFile(meshPath);
         Static = isStaticObject;
         TextureSlots = textureSlots;
+
+        while(TextureSlots.size() < indicies.size()) //if there are not enough texture slots supplied then repeat the last texture slot until there are enough
+        {
+            TextureSlots.push_back(textureSlots.at(textureSlots.size() - 1));
+        }
+
         assosiatedTransform = transform;
     };
     

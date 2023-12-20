@@ -11,10 +11,6 @@ unsigned int vertexBuffer;
 unsigned int indexBuffer;
 unsigned int vertexArrayObject;
 
-const int screenWidth = 1600;
-const int screenHeight = 900;
-
-Camera cam(screenWidth,screenHeight);
 ShaderWrapper shader;
  
 //SurfaceImage* SurfaceImages;
@@ -44,10 +40,10 @@ int Renderer::Initialize()
         return -1;
     }
 
+
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
 
 
     /* Create a windowed mode window and its OpenGL context */
@@ -58,6 +54,8 @@ int Renderer::Initialize()
         glfwTerminate();
         return -1;
     }
+
+
 
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
@@ -71,7 +69,7 @@ int Renderer::Initialize()
         return -1;
     }
     else
-        std::cout << glGetString(GL_VERSION);
+        std::cout << "glew okay, running version " << glGetString(GL_VERSION) << std::endl;
 
 
 
@@ -83,7 +81,6 @@ int Renderer::Initialize()
     glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, NULL, GL_TRUE);
 
     //    \GL_2023\Source\Client_Assets\GraphicsAssets\Textures\texture.png
-    ActiveCamera = &cam; 
     shader.LoadShaders();
 
    surfaceImage = new SurfaceImage(FileLoader::GetWorkingDir() + "/Source/Client_Assets/GraphicsAssets/Textures/texture.png");
@@ -121,17 +118,34 @@ void Renderer::InitBuffers(std::vector<float> verticies,std::vector<unsigned int
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
 }
+
+void Renderer::RenderStatic()
+{
+
+}
+void Renderer::RenderDynamic()
+{
+  
+}
 void Renderer::Destroy()
 {
+    std::cout << "renderer destroy called" << std::endl;
     glDeleteProgram(shader.Shader);
     glfwTerminate();
 }
+
 int Renderer::Render() //returns -1 to quit window
 {
+    if (window == nullptr)
+    {
+        std::cout << "WINDOW WAS NULLPTR, EXITING PROGRAM";
+            return -1;
+    }
+
     glUseProgram(shader.Shader);
    
     ActiveCamera->updateRotation(); ActiveCamera->makeView();
-    shader.UpdateMatricies(cam.projectionMatrix,glm::mat4(1.0f), cam.viewMatrix);
+    shader.UpdateMatricies(ActiveCamera->projectionMatrix,glm::mat4(1.0f), ActiveCamera->viewMatrix);
     surfaceImage->Bind(0);
     shader.SetSurfaceImage(0, 0);
 
@@ -143,18 +157,20 @@ int Renderer::Render() //returns -1 to quit window
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
    
 
-   
     glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT,nullptr);
+
 
     /* Swap front and back buffers */
     glfwSwapBuffers(window);
 
     /* Poll for and process events */
     glfwPollEvents();
-    
+
 
     if (glfwWindowShouldClose(window))
         return -1;
     else
         return 0;
+
+    return 0;
 }

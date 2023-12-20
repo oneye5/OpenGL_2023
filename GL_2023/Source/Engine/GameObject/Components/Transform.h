@@ -50,7 +50,7 @@ class Transform : public Component
         scale = glm::vec3(1);
         GetTranslationMatrix();
     };
-
+   
 
 private: 
     glm::vec3 oldPos; //used for detecting if current translation matrix is dirty

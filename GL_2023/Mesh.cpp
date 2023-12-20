@@ -14,11 +14,11 @@ bool Mesh::PushToBuffer()
 	
 	if (Static)
 	{
-		renderer->BufferManager.PushToStaticBuffer(&data, &indicies,&TextureSlots,&assosiatedTransform->pos,&assosiatedTransform->rot,&assosiatedTransform->scale);
+		renderer->BufferManager->PushToStaticBuffer(&data, &indicies,&TextureSlots,&assosiatedTransform->pos,&assosiatedTransform->rot,&assosiatedTransform->scale);
 		return true;
 	}
 	//dynamic object
-	renderer->BufferManager.PushToDynamicBuffer(&data, &indicies, &TextureSlots, &assosiatedTransform->pos, &assosiatedTransform->rot, &assosiatedTransform->scale);
+	renderer->BufferManager->PushToDynamicBuffer(&data, &indicies, &TextureSlots, &assosiatedTransform->pos, &assosiatedTransform->rot, &assosiatedTransform->scale);
 
 	return true;
 }

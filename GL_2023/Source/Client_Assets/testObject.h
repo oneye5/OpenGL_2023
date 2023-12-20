@@ -10,11 +10,12 @@ class testObject : public GameObject
 {
 	Mesh* mesh = nullptr;
 	Transform* transform = nullptr;
+	Renderer* renderer = nullptr;
+	InputManager* Inputs = nullptr;
 public:
 	virtual void Update(float ms) override
 	{
-		auto Inputs = ENGINE_SYSTEMS::GET_INPUTMANAGER();
-		auto renderer = ENGINE_SYSTEMS::GET_RENDERER();
+
 		auto moveBy = Inputs->GetMoveVector();
 		renderer->ActiveCamera->pos += moveBy/500.0f;
 		std::cout << "currnet cam pos " << renderer->ActiveCamera->pos.x << " " << renderer->ActiveCamera->pos.y << " " << renderer->ActiveCamera->pos.z << std::endl;
@@ -43,9 +44,14 @@ public:
 	{
 		std::cout << "start"<< std::endl;
 
+		Inputs = ENGINE_SYSTEMS::GET_INPUTMANAGER();
+		renderer = ENGINE_SYSTEMS::GET_RENDERER();
+
 		transform = new Transform(this);
 		std::vector<unsigned int> textureSlots; textureSlots.push_back(0);
-		mesh = new Mesh(this, transform, "untitled.obj", textureSlots, true);
+		mesh = new Mesh(this, transform, "untitled.obj", textureSlots, false);
 		mesh->PushToBuffer();
+		renderer->BufferManager->RefreshIndexBuffer();
+		renderer->InitBuffers(renderer->BufferManager->vertexBuffer, renderer->BufferManager->indexBuffer);
 	}
 };
