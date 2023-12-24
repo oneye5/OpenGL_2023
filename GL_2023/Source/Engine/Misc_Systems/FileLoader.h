@@ -9,19 +9,38 @@
 #include "unordered_map"
 #include <set>
 
+
 using std::string;
 using std::vector;
 static class FileLoader
 {
 public:
+	static int removeDecimal(float number)
+	{
+		// Multiply the float by a power of 10 to shift the decimal point
+		float shiftedNumber = number * 10000.0f; // 4.4444 * 10000 = 44444.4
+
+		// Cast the result to an integer
+		int result = static_cast<int>(shiftedNumber);
+
+		return result;
+	}
+
+
 	/// <summary>
 	/// Loads a specified .obj file using a full path and reformats and indexes the data for use by OpenGL. use GetWorkingDir() to make it relative to the project.
 	/// </summary>
 	/// <param name="data">Used as an output. Adds data for the verticies, including positon, normal and uv data.</param>
 	/// <param name="indicies">Used as an output. Each index refers to a set of vertex data.</param>
 	/// <returns>Returns false if the method fails.</returns>
-	static bool LoadMesh(std::string path,std::vector<float>& dataOut, vector<vector<unsigned int>>& indiciesOut)
+	static bool LoadMesh(std::string path, std::vector<float>& dataOut, std::vector<std::vector<unsigned int>>& indiciesOut)
 	{
+
+
+
+
+
+
 		struct VertexData
 		{
 			float x, y, z, nx, ny, nz, u, v;
@@ -31,112 +50,121 @@ public:
 				return std::array<float, 8>{x, y, z, nx, ny, nz, u, v};
 			}
 
-			float getProduct() const
+			int getProduct() const
 			{
-				return x * y * z * nx * ny * nz * u * v;
+				return removeDecimal(x) + removeDecimal(y) * 10 + removeDecimal(z) * 100 + removeDecimal(nx) * 1000 +
+					removeDecimal(ny) * 10000 + removeDecimal(nz) * 100000 + removeDecimal(u) * 1000000 + removeDecimal(v) * 10000000;
 			}
 		};
 
 		dataOut.clear(); indiciesOut.clear();
 
-		std::vector<glm::vec3> verticies, normals; std::vector<glm::vec2> uv; std::vector<std::vector<unsigned int>> faceIndiciesGroups;
-	
+		std::vector<glm::vec3> verticies, normals; std::vector<glm::vec2> uv;
+		std::vector<std::vector<unsigned int>> faceIndiciesGroups;
 
-			std::ifstream fileStream(path);
-			if (!fileStream.is_open()) {
-				std::cout << "failed to open file in loadmesh";
-				return false;
-			}
 
-			std::string line;std::vector<unsigned int> faceIndicies;
-			while (std::getline(fileStream, line))
+		std::ifstream fileStream(path);
+		if (!fileStream.is_open()) {
+			std::cout << "failed to open file in loadmesh";
+			return false;
+		}
+
+		std::string line; std::vector<unsigned int> faceIndicies;
+		while (std::getline(fileStream, line))
+		{
+
+			std::istringstream lineStream(line);
+			std::string prefix;
+			lineStream >> prefix;
+
+			if (prefix == "v") //vertex
 			{
-				
-				std::istringstream lineStream(line);
-				std::string prefix;
-				lineStream >> prefix;
-
-				if (prefix == "v") //vertex
+				glm::vec3 vertex;
+				lineStream >> vertex.x >> vertex.y >> vertex.z;
+				verticies.push_back(vertex);
+			}
+			else if (prefix == "vn") //norm
+			{
+				glm::vec3 norm;
+				lineStream >> norm.x >> norm.y >> norm.z;
+				normals.push_back(norm);
+			}
+			else if (prefix == "vt") //uv's
+			{
+				glm::vec2 texCoord;
+				lineStream >> texCoord.x >> texCoord.y;
+				uv.push_back(texCoord);
+			}
+			else if (prefix == "f") //indicies
+			{
+				std::string s1, s2, s3;
+				lineStream >> s1 >> s2 >> s3;
+				std::vector<std::string> args;
+				std::string arg;
+				for (auto x : s1)
 				{
-					glm::vec3 vertex;
-					lineStream >> vertex.x >> vertex.y >> vertex.z;
-					verticies.push_back(vertex);
+					if (x == '/')
+					{
+						args.push_back(arg);
+						arg = "";
+						continue;
+					}
+					arg += x;
 				}
-				else if (prefix == "vn") //norm
+				args.push_back(arg);
+				arg = "";
+				for (auto x : s2)
 				{
-					glm::vec3 norm;
-					lineStream >> norm.x >> norm.y >> norm.z;
-					normals.push_back(norm);
+					if (x == '/')
+					{
+						args.push_back(arg);
+						arg = "";
+						continue;
+					}
+					arg += x;
 				}
-				else if (prefix == "vt") //uv's
+				args.push_back(arg);
+				arg = "";
+				for (auto x : s3)
 				{
-					glm::vec2 texCoord;
-					lineStream >> texCoord.x >> texCoord.y;
-					uv.push_back(texCoord);
+					if (x == '/')
+					{
+						args.push_back(arg);
+						arg = "";
+						continue;
+					}
+					arg += x;
 				}
-				else if (prefix == "f") //indicies
+				args.push_back(arg);
+				arg = "";
+
+
+
+
+				//cast to unsigned int
+				for (auto x : args)
 				{
-					std::string s1, s2, s3;
-					lineStream >> s1 >> s2 >> s3;
-					std::vector<std::string> args;
-					std::string arg;
-					for (auto x : s1)
-					{
-						if (x == '/')
-						{
-							args.push_back(arg);
-							arg = "";
-							continue;
-						}
-						arg += x;
-					}
-					args.push_back(arg);
-					arg = "";
-					for (auto x : s2)
-					{
-						if (x == '/')
-						{
-							args.push_back(arg);
-							arg = "";
-							continue;
-						}
-						arg += x;
-					}
-					args.push_back(arg);
-					arg = "";
-					for (auto x : s3)
-					{
-						if (x == '/')
-						{
-							args.push_back(arg);
-							arg = "";
-							continue;
-						}
-						arg += x;
-					}
-					args.push_back(arg);
-					arg = "";
-
-
-
-
-					//cast to unsigned int
-					for (auto x : args)
-					{
-						faceIndicies.push_back(std::stoi(x));
-					}
-				}
-				else if (prefix == "usemtl")
-				{
-					if (faceIndicies.size() != 0)
-					{
-						faceIndiciesGroups.push_back(faceIndicies);
-						faceIndicies.clear();
-					}
+					faceIndicies.push_back(std::stoi(x));
 				}
 			}
-			faceIndiciesGroups.push_back(faceIndicies);
-	
+			else if (prefix == "usemtl")
+			{
+				if (faceIndicies.size() != 0)
+				{
+					faceIndiciesGroups.push_back(faceIndicies);
+					faceIndicies.clear();
+				}
+			}
+		}
+		faceIndiciesGroups.push_back(faceIndicies);
+		
+		//debug
+		std::cout<<std::endl;
+		for (auto x : faceIndiciesGroups)
+			for (auto y : x)
+			{
+				std::cout << y << " ";
+			}
 
 
 
@@ -145,7 +173,12 @@ public:
 
 
 		//get rid of index buffer to recreate an opengl compatible one later
+			
+
+
+
 		vector<vector<VertexData>> objectDataGroups; 
+		
 		for (auto faceIndicies2 : faceIndiciesGroups)
 		{
 			vector<VertexData> dataGroup;
@@ -163,31 +196,39 @@ public:
 				vData.u = (uv[faceIndicies2[i + 1] - 1].x);
 				vData.v = (uv[faceIndicies2[i + 1] - 1].y);
 
-				dataGroup.push_back(vData);
+				std::cout << vData.x << " " << vData.y << " " << vData.z << " " << vData.nx << " " << vData.ny << " " << vData.nz << " " << vData.u << " " << vData.v <<std::endl;
+
+	 			dataGroup.push_back(vData);
 			}
 			objectDataGroups.push_back(dataGroup);
 		}
-
-
+	
 		//now put in one vertex buffer and generate new index buffers per object group / texture
-		std::unordered_map<float, unsigned int> elements;
+
+
+		
+		std::unordered_map<int , unsigned int> elements;
 		vector<VertexData> vertexData;
 		for (vector<VertexData> objectData : objectDataGroups)
 		{ 
-			vector<unsigned int> groupIndecies;
+			vector<unsigned > groupIndecies;
 			for (VertexData vertex : objectData)
-			{
-				unsigned int index ;
+			{ 
+				unsigned int index = -1;
 				auto iterator = elements.find(vertex.getProduct());
+
 				if (iterator != elements.end()) //element found
 				{
-					index = iterator->second;
+					index = iterator->second; 
+					///std::cout << "duplicate item found, indexing approrocately" << std::endl;
 				}
 				else
 				{
 					vertexData.push_back(vertex);
 					index = vertexData.size() - 1;
 					elements.insert(std::make_pair(vertex.getProduct(), index));
+
+					//std::cout << "no duplicate element found" << std::endl;
 				}
 
 				groupIndecies.push_back(index);
@@ -195,15 +236,38 @@ public:
 			
 			indiciesOut.push_back(groupIndecies);
 		}
-		for (auto data : vertexData)
+	
+
+
+		for (auto& data : vertexData)
 		{
-			for (auto x : data.getComponents())
+			dataOut.push_back(data.x);
+			dataOut.push_back(data.y);
+			dataOut.push_back(data.z);
+
+			dataOut.push_back(data.nx);
+			dataOut.push_back(data.ny);
+			dataOut.push_back(data.nz);
+
+			dataOut.push_back(data.u);
+			dataOut.push_back(data.v);
+		}
+		
+
+		//debug 
+		for (auto group : indiciesOut)
+		{
+			for (auto x : group)
 			{
-				dataOut.push_back(x);
+				std::cout << 
+					dataOut[x * 8]     << " " << dataOut[x * 8 + 1] << " " <<
+					dataOut[x * 8 + 2] << " " << dataOut[x * 8 + 3] << " " <<
+					dataOut[x * 8 + 4] << " " << dataOut[x * 8 + 5] << " " <<
+					dataOut[x * 8 + 6] << " " << dataOut[x * 8 + 7] << std::endl;
 			}
 		}
-
 		
+
 		return true;
 	}
 
