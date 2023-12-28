@@ -26,6 +26,159 @@ public:
 		return result;
 	}
 
+	static bool LoadMeshV2(std::string path, std::vector<float>& dataOut, std::vector<std::vector<unsigned int>>& indiciesOut)
+	{
+		struct VertexData
+		{
+			float x, y, z, nx, ny, nz, u, v;
+
+			std::array<float, 8> getComponents() const
+			{
+				return std::array<float, 8>{x, y, z, nx, ny, nz, u, v};
+			}
+
+			int getProduct() const
+			{
+				return removeDecimal(x) + removeDecimal(y) * 10 + removeDecimal(z) * 100 + removeDecimal(nx) * 1000 +
+					removeDecimal(ny) * 10000 + removeDecimal(nz) * 100000 + removeDecimal(u) * 1000000 + removeDecimal(v) * 10000000;
+			}
+		};
+
+		dataOut.clear(); indiciesOut.clear();
+
+		std::vector<glm::vec3> verticies, normals; std::vector<glm::vec2> uv;
+		std::vector<std::vector<unsigned int>> faceIndiciesGroups;
+
+
+		std::ifstream fileStream(path);
+		if (!fileStream.is_open()) {
+			std::cout << "failed to open file in loadmesh";
+			return false;
+		}
+
+		{
+			std::string line; std::vector<unsigned int> faceIndicies;
+			while (std::getline(fileStream, line))
+			{
+
+				std::istringstream lineStream(line);
+				std::string prefix;
+				lineStream >> prefix;
+
+				if (prefix == "v") //vertex
+				{
+					glm::vec3 vertex;
+					lineStream >> vertex.x >> vertex.y >> vertex.z;
+					verticies.push_back(vertex);
+				}
+				else if (prefix == "vn") //norm
+				{
+					glm::vec3 norm;
+					lineStream >> norm.x >> norm.y >> norm.z;
+					normals.push_back(norm);
+				}
+				else if (prefix == "vt") //uv's
+				{
+					glm::vec2 texCoord;
+					lineStream >> texCoord.x >> texCoord.y;
+					uv.push_back(texCoord);
+				}
+				else if (prefix == "f") //indicies
+				{
+					std::string s1, s2, s3;
+					lineStream >> s1 >> s2 >> s3;
+					std::vector<std::string> args;
+					std::string arg;
+					for (auto x : s1)
+					{
+						if (x == '/')
+						{
+							args.push_back(arg);
+							arg = "";
+							continue;
+						}
+						arg += x;
+					}
+					args.push_back(arg);
+					arg = "";
+					for (auto x : s2)
+					{
+						if (x == '/')
+						{
+							args.push_back(arg);
+							arg = "";
+							continue;
+						}
+						arg += x;
+					}
+					args.push_back(arg);
+					arg = "";
+					for (auto x : s3)
+					{
+						if (x == '/')
+						{
+							args.push_back(arg);
+							arg = "";
+							continue;
+						}
+						arg += x;
+					}
+					args.push_back(arg);
+					arg = "";
+
+
+
+
+					//cast to unsigned int
+					for (auto x : args)
+					{
+						faceIndicies.push_back(std::stoi(x));
+					}
+				}
+				else if (prefix == "usemtl")
+				{
+					if (faceIndicies.size() != 0)
+					{
+						faceIndiciesGroups.push_back(faceIndicies);
+						faceIndicies.clear();
+					}
+				}
+			}
+			faceIndiciesGroups.push_back(faceIndicies);
+		}
+
+
+		//debug
+		std::cout << std::endl;
+		for (auto x : faceIndiciesGroups)
+			for (auto y : x)
+			{
+				std::cout << y << " ";
+			}
+
+
+
+		//file is now done loading, put it into a format that opengl can use
+		//get rid of index buffer to recreate an opengl compatible one later
+		vector<vector<VertexData>> processedVertexData;
+		vector<vector<unsigned int>> processedIndies;
+		for (auto group : faceIndiciesGroups) //formatted as, xyz, xyz normal, uv
+		{
+			vector<VertexData> groupData;
+			for (int i = 0; i < group.size();)
+			{
+				VertexData vData;
+				vData.x = verticies[group[i] - 1].x; vData.y = verticies[group[i] - 1].y; vData.y = verticies[group[i] - 1].z; i++;
+				vData.nx = normals[group[i] - 1].x; vData.ny = normals[group[i] - 1].y; vData.nz = normals[group[i] - 1].z; i++;
+				vData.u = uv[group[i] - 1].x; vData.v = uv[group[i] - 1].y; i++;
+				groupData.push_back(vData);
+			}
+			processedVertexData.push_back(groupData);
+		}
+		
+
+		return true;
+	}
 
 	/// <summary>
 	/// Loads a specified .obj file using a full path and reformats and indexes the data for use by OpenGL. use GetWorkingDir() to make it relative to the project.
@@ -35,14 +188,10 @@ public:
 	/// <returns>Returns false if the method fails.</returns>
 	static bool LoadMesh(std::string path, std::vector<float>& dataOut, std::vector<std::vector<unsigned int>>& indiciesOut)
 	{
-
-
-
-
-
-
+		return LoadMeshV2(path, dataOut, indiciesOut);
 		struct VertexData
 		{
+
 			float x, y, z, nx, ny, nz, u, v;
 
 			std::array<float, 8> getComponents() const
