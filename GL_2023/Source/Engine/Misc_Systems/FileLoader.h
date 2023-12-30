@@ -160,21 +160,35 @@ public:
 
 		//file is now done loading, put it into a format that opengl can use
 		//get rid of index buffer to recreate an opengl compatible one later
+
 		vector<vector<VertexData>> processedVertexData;
-		vector<vector<unsigned int>> processedIndies;
-		for (auto group : faceIndiciesGroups) //formatted as, xyz, xyz normal, uv
+		for (auto group : faceIndiciesGroups) //formatted as xyz uv and normal xyz
 		{
 			vector<VertexData> groupData;
+
 			for (int i = 0; i < group.size();)
 			{
 				VertexData vData;
-				vData.x = verticies[group[i] - 1].x; vData.y = verticies[group[i] - 1].y; vData.y = verticies[group[i] - 1].z; i++;
-				vData.nx = normals[group[i] - 1].x; vData.ny = normals[group[i] - 1].y; vData.nz = normals[group[i] - 1].z; i++;
-				vData.u = uv[group[i] - 1].x; vData.v = uv[group[i] - 1].y; i++;
+				vData.x = verticies[group[i] - 1].x;
+				vData.y = verticies[group[i] - 1].y;
+				vData.y = verticies[group[i] - 1].z; i++;
+
+			
+
+				vData.u = uv[group[i] - 1].x;
+				vData.v = uv[group[i] - 1].y;i++;
+				
+				vData.nx = normals[group[i] - 1].x;
+				vData.ny = normals[group[i] - 1].y;
+				vData.nz = normals[group[i] - 1].z; i++;
+
 				groupData.push_back(vData);
 			}
 			processedVertexData.push_back(groupData);
 		}
+		
+
+
 		
 
 		return true;
