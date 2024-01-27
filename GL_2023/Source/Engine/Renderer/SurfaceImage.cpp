@@ -26,6 +26,7 @@ SurfaceImage::~SurfaceImage()
 	glDeleteTextures(1, &textureID);
 }
 
+
 void SurfaceImage::Bind(unsigned int slot) const
 {
 	glActiveTexture(GL_TEXTURE0 + slot);

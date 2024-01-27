@@ -25,7 +25,147 @@ public:
 
 		return result;
 	}
+	static bool LoadMeshV3(std::string path, std::vector<float>& dataOut, std::vector<std::vector<unsigned int>>& indiciesOut)
+	{
+		dataOut.clear(); indiciesOut.clear();
+		std::vector<glm::vec3> verticies, normals; std::vector<glm::vec2> uv;
+		std::vector<std::vector<unsigned int>> faceIndiciesGroups;
 
+#pragma region loadfile
+
+		std::ifstream fileStream(path);
+		if (!fileStream.is_open()) {
+			std::cout << "failed to open file in loadmesh";
+			return false;
+		}
+
+		{
+			std::string line; std::vector<unsigned int> faceIndicies;
+			while (std::getline(fileStream, line))
+			{
+
+				std::istringstream lineStream(line);
+				std::string prefix;
+				lineStream >> prefix;
+
+				if (prefix == "v") //vertex
+				{
+					glm::vec3 vertex;
+					lineStream >> vertex.x >> vertex.y >> vertex.z;
+					verticies.push_back(vertex);
+				}
+				else if (prefix == "vn") //norm
+				{
+					glm::vec3 norm;
+					lineStream >> norm.x >> norm.y >> norm.z;
+					normals.push_back(norm);
+				}
+				else if (prefix == "vt") //uv's
+				{
+					glm::vec2 texCoord;
+					lineStream >> texCoord.x >> texCoord.y;
+					uv.push_back(texCoord);
+				}
+				else if (prefix == "f") //indicies
+				{
+					std::string s1, s2, s3;
+					lineStream >> s1 >> s2 >> s3;
+					std::vector<std::string> args;
+					std::string arg;
+					for (auto x : s1)
+					{
+						if (x == '/')
+						{
+							args.push_back(arg);
+							arg = "";
+							continue;
+						}
+						arg += x;
+					}
+					args.push_back(arg);
+					arg = "";
+					for (auto x : s2)
+					{
+						if (x == '/')
+						{
+							args.push_back(arg);
+							arg = "";
+							continue;
+						}
+						arg += x;
+					}
+					args.push_back(arg);
+					arg = "";
+					for (auto x : s3)
+					{
+						if (x == '/')
+						{
+							args.push_back(arg);
+							arg = "";
+							continue;
+						}
+						arg += x;
+					}
+					args.push_back(arg);
+					arg = "";
+
+
+
+
+					//cast to unsigned int
+					for (auto x : args)
+					{
+						faceIndicies.push_back(std::stoi(x));
+					}
+				}
+				else if (prefix == "usemtl")
+				{
+					if (faceIndicies.size() != 0)
+					{
+						faceIndiciesGroups.push_back(faceIndicies);
+						faceIndicies.clear();
+					}
+				}
+			}
+			faceIndiciesGroups.push_back(faceIndicies);
+		}
+#pragma endregion
+#pragma region removeIndexBuffer
+		//group,vertex,vertexcomponents,component
+		vector<vector<vector<float>>> indexlessData;
+		for (auto& group : faceIndiciesGroups)
+		{
+			vector<vector<float>> groupData;
+				
+			for (int i = 0; i < group.size();)
+			{
+				
+				vector<float> vData;
+				vData.push_back(verticies[group[i] - 1].x);
+				vData.push_back(verticies[group[i] - 1].y);
+				vData.push_back(verticies[group[i] - 1].z); i++;
+
+
+
+				vData.push_back(uv[group[i] - 1].x);
+				vData.push_back(uv[group[i] - 1].y); i++;
+
+				vData.push_back(normals[group[i] - 1].x);
+				vData.push_back(normals[group[i] - 1].y);
+				vData.push_back(normals[group[i] - 1].z); i++;
+
+				groupData.push_back(vData);
+			}
+			indexlessData.push_back(groupData);
+			
+		}
+#pragma endregion
+#pragma region reformatting
+
+#pragma endregion
+
+			return false;
+	}
 	static bool LoadMeshV2(std::string path, std::vector<float>& dataOut, std::vector<std::vector<unsigned int>>& indiciesOut)
 	{
 		struct VertexData
@@ -171,7 +311,7 @@ public:
 				VertexData vData;
 				vData.x = verticies[group[i] - 1].x;
 				vData.y = verticies[group[i] - 1].y;
-				vData.y = verticies[group[i] - 1].z; i++;
+				vData.z = verticies[group[i] - 1].z; i++;
 
 			
 
@@ -190,6 +330,47 @@ public:
 
 
 		
+
+		std::vector<float> vertexBuffer;
+		std::vector<std::vector<unsigned int>> indicesBuffers;
+
+		// Combine the vertices and generate index buffers for each material group
+		for (const auto& group : processedVertexData) {
+			std::unordered_map<int, unsigned int> indexMap; // Map to keep track of vertices
+
+			// Generate a new index buffer for this material group
+			std::vector<unsigned int> indices;
+
+			// Process each vertex in the group
+			for (const auto& vertex : group) {
+				int vertexHash = vertex.getProduct(); // Assuming getProduct() gives a unique hash for a VertexData
+				auto it = indexMap.find(vertexHash);
+
+				if (it != indexMap.end()) {
+					// Vertex already exists, add its index to indices buffer
+					indices.push_back(it->second);
+				}
+				else {
+					// New vertex, add it to the vertex buffer and update the index buffer
+					//vertexBuffer.insert(vertexBuffer.end(), vertex.getComponents().begin(), vertex.getComponents().end());
+					for (auto& x : vertex.getComponents())
+						vertexBuffer.push_back(x);
+
+					unsigned int newIndex = static_cast<unsigned int>((vertexBuffer.size() / 8) - 1); // New index
+					indices.push_back(newIndex); // Add index to buffer
+					indexMap[vertexHash] = newIndex; // Update map with the new index
+				}
+			}
+
+			// Store the indices buffer for this material group
+			indicesBuffers.push_back(indices);
+		}
+
+		// Finally, assign the data to the output parameters
+		dataOut = std::move(vertexBuffer);
+		indiciesOut = std::move(indicesBuffers);
+
+
 
 		return true;
 	}
@@ -347,7 +528,7 @@ public:
 			vector<VertexData> dataGroup;
 			for (int i = 0; i < faceIndicies2.size(); i += 3)//+=3 because indicies are grouped in lots of 3
 			{
-				VertexData vData;
+				VertexData vData;	
 				vData.x = (verticies[faceIndicies2[i] - 1].x);
 				vData.y = (verticies[faceIndicies2[i] - 1].y);
 				vData.z = (verticies[faceIndicies2[i] - 1].z);
