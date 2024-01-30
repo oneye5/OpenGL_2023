@@ -130,6 +130,7 @@ public:
 			faceIndiciesGroups.push_back(faceIndicies);
 		}
 #pragma endregion
+		std::cout << "\nvert size " << verticies.size() << " norm size " << normals.size() << " uv size " << uv.size() << "\ntotal data size in count floats : " << verticies.size() * 3 + normals.size() * 3 + uv.size() * 2;
 #pragma region removeIndexBuffer
 		//group,vertex,vertexcomponents,component
 		vector<vector<vector<float>>> indexlessData;
@@ -161,9 +162,25 @@ public:
 		}
 #pragma endregion
 #pragma region reformatting
+		//debug reformatting
+		
+		for (auto materialGroup : indexlessData)
+		{
+			vector<unsigned int> groupIndicies;
+			int i = 0;
+			for (auto x : materialGroup)
+			{
+				for (auto y : x)
+					dataOut.push_back(y);
 
+				groupIndicies.push_back(i);
+				i++;
+			}
+			indiciesOut.push_back(groupIndicies);
+		}
 #pragma endregion
-
+		
+		std::cout << "huh";
 			return false;
 	}
 	static bool LoadMeshV2(std::string path, std::vector<float>& dataOut, std::vector<std::vector<unsigned int>>& indiciesOut)
@@ -383,7 +400,7 @@ public:
 	/// <returns>Returns false if the method fails.</returns>
 	static bool LoadMesh(std::string path, std::vector<float>& dataOut, std::vector<std::vector<unsigned int>>& indiciesOut)
 	{
-		return LoadMeshV2(path, dataOut, indiciesOut);
+		return LoadMeshV3(path, dataOut, indiciesOut);
 		struct VertexData
 		{
 
